@@ -1,11 +1,11 @@
-import "@/assets/styles/globals.css";
-
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 
 import { E_AppThemes } from "@/lib/appTypes";
 import { APP_DESCRIPTION, APP_NAME, SERVER_URL } from "@/lib/constants";
+
+import "@/assets/styles/globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
