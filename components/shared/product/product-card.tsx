@@ -5,6 +5,8 @@ import Link from "next/link";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { T_Product } from "@/lib/appTypes";
 
+import ProductPice from "./product-pice";
+
 type I_Props = {
   product: T_Product;
 };
@@ -24,16 +26,16 @@ const ProductCard: FC<I_Props> = ({ product }) => {
           />
         </Link>
       </CardHeader>
-      <CardContent className="p-4 grid gap-4">
+      <CardContent className="p-4 flex flex-col gap-4 h-full">
         <div className="text-xs">{product.brand}</div>
-        <Link href={`/product/${product.slug}`}>
+        <Link href={`/product/${product.slug}`} className="flex-grow-1">
           <h2 className="text-sm font-medium">{product.name}</h2>
         </Link>
-        <div className="flex-between gap-4">
+        <div className="flex-between gap-4 h-8 border-t-2">
           <p>{product.rating} Stars</p>
 
           {!!product.stock ? (
-            <p className="font-bold">{product.price}</p>
+            <ProductPice value={+product.price} />
           ) : (
             <p className="text-destructive">Out of stock</p>
           )}
