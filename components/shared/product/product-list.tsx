@@ -1,6 +1,6 @@
 import { FC } from "react";
 
-import { T_Product } from "@/lib/appTypes";
+import { T_Product } from "@/app-types-ts";
 
 import ProductCard from "./product-card";
 

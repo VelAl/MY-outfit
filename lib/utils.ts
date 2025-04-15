@@ -6,5 +6,8 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 //Convert prisma obj into a regular JS obj
-export const convertoToJSObj = <T>(value: T): T =>
-  JSON.parse(JSON.stringify(value));
+export const converЕoToJSObj = <T, K>(value: K) =>
+  JSON.parse(JSON.stringify(value)) as T;
+
+//Format number with decimals
+export const fomatNumWithDecimals = (num: number) => num.toFixed(2);

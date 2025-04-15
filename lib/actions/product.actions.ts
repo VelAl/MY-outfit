@@ -1,9 +1,10 @@
 "use server";
-import { LATEST_PRODS_LIMIT } from "../constants";
-import { PrismaClient } from "../generated/prisma";
-import { convertoToJSObj } from "../utils";
+import { T_Product } from "@/app-types-ts";
 
-// Get latest products
+import { LATEST_PRODS_LIMIT } from "../constants";
+import { PrismaClient, Product } from "../generated/prisma";
+import { converЕoToJSObj } from "../utils";
+
 export async function getLatestProducts() {
   const prisma = new PrismaClient();
 
@@ -12,5 +13,5 @@ export async function getLatestProducts() {
     orderBy: { createdAt: "desc" },
   });
 
-  return convertoToJSObj(data);
+  return converЕoToJSObj<T_Product[], Product[]>(data);
 }

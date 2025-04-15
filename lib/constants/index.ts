@@ -1,4 +1,4 @@
-import { E_AppThemes } from "../appTypes";
+import { E_AppThemes } from "@/app-types-ts";
 
 export const APP_NAME = process.env.NEXT_PUBLIC_APP_NAME || "MY-outfit";
 export const APP_DESCRIPTION =

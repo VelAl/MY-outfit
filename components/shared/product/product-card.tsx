@@ -2,8 +2,8 @@ import { FC } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
+import { T_Product } from "@/app-types-ts";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { T_Product } from "@/lib/appTypes";
 
 import ProductPice from "./product-pice";
 
