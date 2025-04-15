@@ -12,3 +12,5 @@ export const appThemes: E_AppThemes[] = [
   E_AppThemes.LIGHT,
   E_AppThemes.DARK,
 ];
+
+export const LATEST_PRODS_LIMIT = Number(process.env.LATEST_PRODS_LIMIT || 4);
