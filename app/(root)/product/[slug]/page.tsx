@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 
+import { ProductImages } from "@/components/shared/product";
 import ProductPice from "@/components/shared/product/product-pice";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -19,7 +20,9 @@ const ProductsDetailsPage = async ({ params }: I_Props) => {
       <section>
         <div className="grid grid-cols-1 md:grid-cols-5">
           {/* IMAGES COL */}
-          <div className="col-span-2"></div>
+          <div className="col-span-2">
+            <ProductImages images={product.images} />
+          </div>
 
           {/* DETAILS COL */}
           <div className="col-span-2 p-5">
