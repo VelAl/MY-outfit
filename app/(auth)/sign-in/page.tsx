@@ -19,10 +19,16 @@ export const metadata: Metadata = {
   title: "Sign In",
 };
 
-const SignInPage = async () => {
+type T_Props = {
+  searchParams: Promise<{ goBackUrl: string }>;
+};
+
+const SignInPage = async ({ searchParams }: T_Props) => {
+  const { goBackUrl } = await searchParams;
+
   const session = await auth();
 
-  if (session) return redirect("/");
+  if (session) return redirect(goBackUrl || "/");
 
   return (
     <div className="w-full max-w-md mx-auto">

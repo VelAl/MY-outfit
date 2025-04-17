@@ -2,6 +2,7 @@
 
 import { useActionState } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,8 +15,12 @@ const SignInCredsForm = () => {
     message: "",
   });
 
+  const searchParams = useSearchParams();
+  const goBackUrl = searchParams.get("searchParams") || "/";
+
   return (
     <form action={action}>
+      <input type="hidden" name="goBackUrl" value={goBackUrl} />
       <div className="space-y-6">
         <div>
           <Label htmlFor="email">Email</Label>
