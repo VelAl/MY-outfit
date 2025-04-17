@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { EllipsisVertical, ShoppingCartIcon, UserIcon } from "lucide-react";
 
+import { auth } from "@/auth";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -11,22 +12,32 @@ import {
 } from "@/components/ui/sheet";
 
 import ModeToggle from "./mode-toggle";
+import UserButton from "./user-button";
 
-const NavContent = () => (
-  <>
-    <ModeToggle />
-    <Button asChild variant="ghost">
-      <Link href={"/cart"}>
-        <ShoppingCartIcon /> Cart
-      </Link>
-    </Button>
-    <Button asChild>
-      <Link href={"/sign-in"}>
-        <UserIcon /> Sign In
-      </Link>
-    </Button>
-  </>
-);
+const NavContent = async () => {
+  const session = await auth();
+
+  return (
+    <>
+      <ModeToggle />
+      <Button asChild variant="ghost" className="ml-4">
+        <Link href={"/cart"}>
+          <ShoppingCartIcon /> Cart
+        </Link>
+      </Button>
+
+      {!session ? (
+        <Button asChild>
+          <Link href={"/sign-in"}>
+            <UserIcon /> Sign In
+          </Link>
+        </Button>
+      ) : (
+        <UserButton />
+      )}
+    </>
+  );
+};
 
 const Menu = () => {
   return (
