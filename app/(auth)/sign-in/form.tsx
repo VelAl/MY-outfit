@@ -1,14 +1,21 @@
 "use client";
 
+import { useActionState } from "react";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { signInWithCreds } from "@/lib/actions/user.actions";
 
 const SignInCredsForm = () => {
+  const [data, action, isPending] = useActionState(signInWithCreds, {
+    success: false,
+    message: "",
+  });
+
   return (
-    <form>
+    <form action={action}>
       <div className="space-y-6">
         <div>
           <Label htmlFor="email">Email</Label>
@@ -22,24 +29,28 @@ const SignInCredsForm = () => {
         </div>
 
         <div>
-          <Label htmlFor="password">Email</Label>
-          <Input
-            id="password"
-            name="password"
-            type="password"
-            required
-            autoComplete="password"
-          />
+          <Label htmlFor="password">Password</Label>
+          <Input id="password" name="password" type="password" required />
         </div>
 
-        <div>
-          <Button className="w-full" variant="default">
-            Submit
-          </Button>
-        </div>
+        {data && !data.success && (
+          <div className="text-center text-destructive">{data.message}</div>
+        )}
+
+        <Button
+          className="w-full"
+          variant="default"
+          type="submit"
+          disabled={isPending}
+        >
+          {isPending ? "Submitting..." : "Sign In"}
+        </Button>
+
         <div className="text-sm text-center text-muted-foreground">
-          Don`t have an account?
-          <Link href="/sign-up" className="link ml-2">Sign Up</Link>
+          Don’t have an account?
+          <Link href="/sign-up" className="link ml-2">
+            Sign Up
+          </Link>
         </div>
       </div>
     </form>
