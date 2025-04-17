@@ -1,10 +1,12 @@
 "use server";
 
 import { isRedirectError } from "next/dist/client/components/redirect-error";
+import { hashSync } from "bcrypt-ts-edge";
 
 import { signIn, signOut } from "@/auth";
+import { prisma } from "@/db/prisma";
 
-import { signInFormSchema } from "../validators";
+import { signInFormSchema, signUpFormSchema } from "../validators";
 
 // Sign in the user with credentials
 export const signInWithCreds = async (
@@ -32,4 +34,34 @@ export const signInWithCreds = async (
 // Sign the user out
 export const signOutUser = async () => {
   await signOut();
+};
+
+// Sign up user
+export const signUpUser = async (prevState: unknown, formData: FormData) => {
+  try {
+    const password = formData.get("password"); // plain password
+
+    const data = signUpFormSchema.parse({
+      name: formData.get("name"),
+      email: formData.get("email"),
+      password,
+    });
+
+    data.password = hashSync(data.password, 10);
+
+    await prisma.user.create({ data });
+
+    await signIn("credentials", { email: data.email, password });
+
+    return { success: true, message: "User registed successfully." };
+  } catch (error) {
+    if (isRedirectError(error)) {
+      throw error;
+    }
+
+    return {
+      success: false,
+      message: "Registration failed. Please try again.",
+    };
+  }
 };
