@@ -1,6 +1,10 @@
 import { z } from "zod";
 
-import { insertProductsSchema } from "@/lib/validators";
+import {
+  cartItemSchema,
+  insertCartSchema,
+  insertProductsSchema,
+} from "@/lib/validators";
 
 export enum E_AppThemes {
   SYSTEM = "system",
@@ -13,3 +17,7 @@ export type T_Product = z.infer<typeof insertProductsSchema> & {
   rating: string;
   createdAt: Date;
 };
+
+export type T_CartItem = z.infer<typeof cartItemSchema>;
+
+export type T_Cart = z.infer<typeof insertCartSchema>;

@@ -4,9 +4,12 @@ import { fomatNumWithDecimals } from "./utils";
 
 const price = z
   .string()
-  .refine((v) => /^\d+(\.\d{2})?$/.test(fomatNumWithDecimals(+v)));
+  .refine(
+    (v) => /^\d+(\.\d{2})?$/.test(fomatNumWithDecimals(+v)),
+    "Invalid price"
+  );
 
-//Schema for inserting products
+//_______CREATE_PRODUCT____________________________________________________
 export const insertProductsSchema = z.object({
   name: z.string().min(3, "Name has to be at least 3 characters"),
   slug: z.string().min(3, "Slug has to be at least 3 characters"),
@@ -25,13 +28,13 @@ export const insertProductsSchema = z.object({
   price,
 });
 
-// schema for users sign in
+//_______USER_SIGN_IN____________________________________________________________
 export const signInFormSchema = z.object({
   email: z.string().email("Ivalid email"),
   password: z.string().min(6, "Password must be at least 6 characters"),
 });
 
-// schema for users sign up
+//_______USER_SIGN_UP____________________________________________________________
 export const signUpFormSchema = z
   .object({
     name: z.string().min(3, "Name must be at least 3 characters"),
@@ -45,3 +48,23 @@ export const signUpFormSchema = z
     message: "Passwords must match",
     path: ["confirmPassword"],
   });
+
+//_______CART_____________________________________________________________________
+export const cartItemSchema = z.object({
+  productId: z.string().min(1, "Product is required."),
+  name: z.string().min(1, "Name is required."),
+  slug: z.string().min(1, "Slug is required."),
+  qty: z.number().int().nonnegative("Quantity must be a positive number."),
+  image: z.string().min(1, "Image is required."),
+  price,
+});
+
+export const insertCartSchema = z.object({
+  items: z.array(cartItemSchema),
+  itemsPrice: price,
+  totalPrice: price,
+  shippingPrice: price,
+  taxPrice: price,
+  sessionCartId: z.string().min(1, "Session cart ID is required."),
+  userId: z.string().optional().nullable(),
+});
