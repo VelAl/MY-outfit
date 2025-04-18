@@ -6,6 +6,7 @@ import { hashSync } from "bcrypt-ts-edge";
 import { signIn, signOut } from "@/auth";
 import { prisma } from "@/db/prisma";
 
+import { formatErorr } from "../utils";
 import { signInFormSchema, signUpFormSchema } from "../validators";
 
 // Sign in the user with credentials
@@ -66,7 +67,7 @@ export const signUpUser = async (prevState: unknown, formData: FormData) => {
 
     return {
       success: false,
-      message: "Registration failed. Please try again.",
+      message: formatErorr(error),
     };
   }
 };
