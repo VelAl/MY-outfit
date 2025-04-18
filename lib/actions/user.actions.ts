@@ -38,18 +38,23 @@ export const signOutUser = async () => {
 
 // Sign up user
 export const signUpUser = async (prevState: unknown, formData: FormData) => {
-  try {
-    const password = formData.get("password"); // plain password
+  const password = formData.get("password") as string;
 
+  try {
     const data = signUpFormSchema.parse({
       name: formData.get("name"),
       email: formData.get("email"),
       password,
+      confirmPassword: formData.get("confirmPassword"),
     });
 
-    data.password = hashSync(data.password, 10);
-
-    await prisma.user.create({ data });
+    await prisma.user.create({
+      data: {
+        name: data.name,
+        email: data.email,
+        password: hashSync(password, 10),
+      },
+    });
 
     await signIn("credentials", { email: data.email, password });
 

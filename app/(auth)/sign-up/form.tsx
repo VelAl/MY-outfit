@@ -6,10 +6,10 @@ import { useSearchParams } from "next/navigation";
 
 import AppInput from "@/components/shared/input";
 import { Button } from "@/components/ui/button";
-import { signInWithCreds } from "@/lib/actions/user.actions";
+import { signUpUser } from "@/lib/actions/user.actions";
 
-const SignInCredsForm = () => {
-  const [data, action, isPending] = useActionState(signInWithCreds, {
+const SignUpForm = () => {
+  const [data, action, isPending] = useActionState(signUpUser, {
     success: false,
     message: "",
   });
@@ -20,7 +20,9 @@ const SignInCredsForm = () => {
   return (
     <form action={action}>
       <input type="hidden" name="goBackUrl" value={goBackUrl} />
-      <div className="space-y-6">
+      <div className="space-y-4">
+        <AppInput id="name" name="name" required autoComplete="name" />
+
         <AppInput
           id="email"
           name="email"
@@ -30,6 +32,13 @@ const SignInCredsForm = () => {
         />
 
         <AppInput id="password" name="password" type="password" required />
+        <AppInput
+          label="confirm password"
+          id="confirmPassword"
+          name="confirmPassword"
+          type="password"
+          required
+        />
 
         {data && !data.success && (
           <div className="text-center text-destructive">{data.message}</div>
@@ -41,17 +50,17 @@ const SignInCredsForm = () => {
           type="submit"
           disabled={isPending}
         >
-          {isPending ? "Submitting..." : "Sign In"}
+          {isPending ? "Submitting..." : "Sign Up"}
         </Button>
 
         <div className="text-sm text-center text-muted-foreground">
-          Don’t have an account?
-          <Link href="/sign-up" className="link ml-2">
-            Sign Up
+          Already have an account?
+          <Link href="/sign-in" className="link ml-2 underline">
+            Sign In
           </Link>
         </div>
       </div>
     </form>
   );
 };
-export default SignInCredsForm;
+export default SignUpForm;
