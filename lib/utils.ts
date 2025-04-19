@@ -7,6 +7,11 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+// Convert prisma object into a regular JS object
+export function convertToPlainObject<T>(value: T): T {
+  return JSON.parse(JSON.stringify(value));
+}
+
 //Format number with decimals
 export const fomatNumWithDecimals = (num: number) => num.toFixed(2);
 
@@ -25,6 +30,6 @@ export const formatErorr = (err: unknown) => {
   } else if (err instanceof Error) {
     return err.message;
   } else {
-    return "Registration failed. Please try again.";
+    return "Something went wrong...";
   }
 };
