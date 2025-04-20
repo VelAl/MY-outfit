@@ -1,7 +1,8 @@
 "use client";
 
+import { useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { Minus, Plus } from "lucide-react";
+import { Loader, Minus, Plus } from "lucide-react";
 import { toast } from "sonner";
 
 import { T_Cart, type T_CartItem } from "@/app-types-ts";
@@ -15,25 +16,28 @@ type I_Props = {
 
 const AddToCart = ({ cart, item }: I_Props) => {
   const router = useRouter();
+  const [isPending, startTransition] = useTransition();
 
   const _handleChange = async (isAdd: boolean) => {
-    const res = isAdd
-      ? await addItemToCart(item)
-      : await removeItemFromCart(item.productId);
+    startTransition(async () => {
+      const res = isAdd
+        ? await addItemToCart(item)
+        : await removeItemFromCart(item.productId);
 
-    if (!res.success) {
-      toast.error(res.message);
-      return;
-    } else {
-      toast.success("Success!", {
-        description: res.message,
+      if (!res.success) {
+        toast.error(res.message);
+        return;
+      } else {
+        toast.success("Success!", {
+          description: res.message,
 
-        action: {
-          label: "Go to Cart",
-          onClick: () => router.push("/cart"),
-        },
-      });
-    }
+          action: {
+            label: "Go to Cart",
+            onClick: () => router.push("/cart"),
+          },
+        });
+      }
+    });
   };
 
   // check if item is in cart
@@ -45,17 +49,39 @@ const AddToCart = ({ cart, item }: I_Props) => {
     <div className="w-full flex justify-center items-center mt-2">
       {exist ? (
         <>
-          <Button className="grow" onClick={() => _handleChange(false)}>
-            <Minus />
+          <Button
+            className="grow"
+            disabled={isPending}
+            onClick={() => _handleChange(false)}
+          >
+            {isPending ? (
+              <Loader className="w-4 h-4 animate-spin" />
+            ) : (
+              <Minus />
+            )}
           </Button>
           <div className="mx-4">{exist.qty}</div>
-          <Button className="grow" onClick={() => _handleChange(true)}>
-            <Plus />
+          <Button
+            className="grow"
+            disabled={isPending}
+            onClick={() => _handleChange(true)}
+          >
+            {isPending ? <Loader className="w-4 h-4 animate-spin" /> : <Plus />}
           </Button>
         </>
       ) : (
-        <Button className="w-full" onClick={() => _handleChange(true)}>
-          <Plus /> Add to cart
+        <Button
+          className="w-full"
+          disabled={isPending}
+          onClick={() => _handleChange(true)}
+        >
+          {isPending ? (
+            <Loader className="w-4 h-4 animate-spin" />
+          ) : (
+            <>
+              <Plus /> Add to cart
+            </>
+          )}
         </Button>
       )}
     </div>
