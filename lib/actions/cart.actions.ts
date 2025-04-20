@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 
-import { T_CartItem } from "@/app-types-ts";
+import { T_Cart, T_CartItem } from "@/app-types-ts";
 import { auth } from "@/auth";
 import { prisma } from "@/db/prisma";
 
@@ -25,6 +25,17 @@ const calcPrices = (items: T_CartItem[]) => {
     taxPrice: taxPrice.toFixed(2),
     totalPrice: totalPrice.toFixed(2),
   };
+};
+
+// Update cart in the DB
+const _updCartInDB = async (cart: T_Cart) => {
+  await prisma.cart.update({
+    where: { id: cart.id },
+    data: {
+      items: cart.items,
+      ...calcPrices(cart.items),
+    },
+  });
 };
 
 export const addItemToCart = async (data: T_CartItem) => {
@@ -84,13 +95,7 @@ export const addItemToCart = async (data: T_CartItem) => {
       }
 
       // save updated cart to db
-      await prisma.cart.update({
-        where: { id: cart.id },
-        data: {
-          items: cart.items,
-          ...calcPrices(cart.items),
-        },
-      });
+      await _updCartInDB(cart);
 
       revalidatePath(`/product/${product.slug}`);
 
@@ -106,7 +111,7 @@ export const addItemToCart = async (data: T_CartItem) => {
   }
 };
 
-export const getMyCart = async () => {
+export const getMyCart = async (): Promise<T_Cart | undefined> => {
   // check for the cart cookie
   const sessionCartId = (await cookies()).get("sessionCartId")?.value;
 
@@ -134,7 +139,7 @@ export const getMyCart = async () => {
   });
 };
 
-export const removeItemCart = async (productId: string) => {
+export const removeItemFromCart = async (productId: string) => {
   try {
     //check for cart cookie
     const sessionCartId = (await cookies()).get("sessionCartId")?.value;
@@ -164,13 +169,7 @@ export const removeItemCart = async (productId: string) => {
     }
 
     // save updated cart to db
-    await prisma.cart.update({
-      where: { id: cart.id },
-      data: {
-        items: cart.items,
-        ...calcPrices(cart.items),
-      },
-    });
+    await _updCartInDB(cart);
 
     revalidatePath(`/product/${product.slug}`);
 
