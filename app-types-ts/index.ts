@@ -4,6 +4,7 @@ import {
   cartItemSchema,
   insertCartSchema,
   insertProductsSchema,
+  shippingAddressSchema,
 } from "@/lib/validators";
 
 export enum E_AppThemes {
@@ -24,3 +25,5 @@ export type T_Cart = z.infer<typeof insertCartSchema> & {
   id: string;
   createdAt: Date;
 };
+
+export type T_ShippingAddress = z.infer<typeof shippingAddressSchema>;
