@@ -2,10 +2,11 @@
 
 import { useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { Loader, Minus, Plus } from "lucide-react";
+import { Minus, Plus } from "lucide-react";
 import { toast } from "sonner";
 
 import { T_Cart, type T_CartItem } from "@/app-types-ts";
+import Spinner from "@/components/shared/spinner";
 import { Button } from "@/components/ui/button";
 import { addItemToCart, removeItemFromCart } from "@/lib/actions/cart.actions";
 
@@ -13,8 +14,6 @@ type I_Props = {
   item: T_CartItem;
   cart?: T_Cart;
 };
-
-const Spinner = () => <Loader className="w-4 h-4 animate-spin" />;
 
 const AddToCart = ({ cart, item }: I_Props) => {
   const router = useRouter();

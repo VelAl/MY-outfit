@@ -47,3 +47,15 @@ export const round2 = (value: number | string) => {
 
   return Math.round((+value + Number.EPSILON) * 100) / 100;
 };
+
+export const formatUSDPrice = (value: number | string) => {
+  if (isNaN(+value)) {
+    return "$0.00";
+  }
+
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    minimumFractionDigits: 2,
+  }).format(+value);
+};
