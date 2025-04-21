@@ -1,9 +1,12 @@
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
 
-import { auth } from "@/auth.edge-config";
+import { T_ShippingAddress } from "@/app-types-ts";
+import { auth } from "@/auth";
 import { getMyCart } from "@/lib/actions/cart.actions";
 import { getUserById } from "@/lib/actions/user.actions";
+
+import ShippingAddressForm from "./form";
 
 export const metadata: Metadata = {
   title: "Shipping Address",
@@ -19,6 +22,10 @@ const ShippingAddressPage = async () => {
 
   const user = await getUserById(userId);
 
-  return <div>page</div>;
+  return (
+    <div>
+      <ShippingAddressForm address={user.address as T_ShippingAddress | null} />
+    </div>
+  );
 };
 export default ShippingAddressPage;
