@@ -18,7 +18,7 @@ const Header = () => {
               width={48}
               priority
             />
-            <span className="hidden lg:block font-bold text-2xl ml-3">
+            <span className="hidden md:block font-bold text-2xl ml-3">
               {APP_NAME}
             </span>
           </Link>

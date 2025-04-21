@@ -14,6 +14,8 @@ type I_Props = {
   cart?: T_Cart;
 };
 
+const Spinner = () => <Loader className="w-4 h-4 animate-spin" />;
+
 const AddToCart = ({ cart, item }: I_Props) => {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
@@ -54,11 +56,7 @@ const AddToCart = ({ cart, item }: I_Props) => {
             disabled={isPending}
             onClick={() => _handleChange(false)}
           >
-            {isPending ? (
-              <Loader className="w-4 h-4 animate-spin" />
-            ) : (
-              <Minus />
-            )}
+            {isPending ? <Spinner /> : <Minus />}
           </Button>
           <div className="mx-4">{exist.qty}</div>
           <Button
@@ -66,7 +64,7 @@ const AddToCart = ({ cart, item }: I_Props) => {
             disabled={isPending}
             onClick={() => _handleChange(true)}
           >
-            {isPending ? <Loader className="w-4 h-4 animate-spin" /> : <Plus />}
+            {isPending ? <Spinner /> : <Plus />}
           </Button>
         </>
       ) : (
@@ -75,13 +73,8 @@ const AddToCart = ({ cart, item }: I_Props) => {
           disabled={isPending}
           onClick={() => _handleChange(true)}
         >
-          {isPending ? (
-            <Loader className="w-4 h-4 animate-spin" />
-          ) : (
-            <>
-              <Plus /> Add to cart
-            </>
-          )}
+          {isPending ? <Spinner /> : <Plus />}
+          Add to cart
         </Button>
       )}
     </div>
