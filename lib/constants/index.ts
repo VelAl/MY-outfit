@@ -14,3 +14,14 @@ export const appThemes: E_AppThemes[] = [
 ];
 
 export const LATEST_PRODS_LIMIT = Number(process.env.LATEST_PRODS_LIMIT || 4);
+
+// Array of regex protected paths patterns
+export const protectedPaths = [
+  /\/shipping-address/,
+  /\/payment-method/,
+  /\/place-order/,
+  /\/profile/,
+  /\/user\/(.*)/,
+  /\/order\/(.*)/,
+  /\/admin/,
+];

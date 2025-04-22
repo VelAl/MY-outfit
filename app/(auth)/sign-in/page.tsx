@@ -20,15 +20,15 @@ export const metadata: Metadata = {
 };
 
 type T_Props = {
-  searchParams: Promise<{ goBackUrl: string }>;
+  searchParams: Promise<{ callbackUrl: string }>;
 };
 
 const SignInPage = async ({ searchParams }: T_Props) => {
-  const { goBackUrl } = await searchParams;
+  const { callbackUrl } = await searchParams;
 
   const session = await auth();
 
-  if (session) return redirect(goBackUrl || "/");
+  if (session) return redirect(callbackUrl || "/");
 
   return (
     <div className="w-full max-w-md mx-auto">

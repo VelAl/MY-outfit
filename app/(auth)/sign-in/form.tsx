@@ -15,11 +15,11 @@ const SignInCredsForm = () => {
   });
 
   const searchParams = useSearchParams();
-  const goBackUrl = searchParams.get("searchParams") || "/";
+  const callbackUrl = searchParams.get("searchParams") || "/";
 
   return (
     <form action={action}>
-      <input type="hidden" name="goBackUrl" value={goBackUrl} />
+      <input type="hidden" name="callbackUrl" value={callbackUrl} />
       <div className="space-y-6">
         <AppInput
           id="email"
