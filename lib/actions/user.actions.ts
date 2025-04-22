@@ -116,7 +116,9 @@ export const updUserAddress = async (
 };
 
 //update user`s payment method
-export const updUserPaymentMethod = async (data: T_PaymentMethod) => {
+export const updUserPaymentMethod = async (
+  data: T_PaymentMethod
+): Promise<T_Message> => {
   try {
     const session = await auth();
     const curentUser = await prisma.user.findFirst({

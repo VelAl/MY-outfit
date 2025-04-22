@@ -37,7 +37,7 @@ const ShippingAddressForm = ({ address }: T_Props) => {
     defaultValues: address || emptyShippingAddress,
   });
 
-  const onSubmit: SubmitHandler<T_ShippingAddress> = async (values) => {
+  const _onSubmit: SubmitHandler<T_ShippingAddress> = async (values) => {
     startTransition(async () => {
       const res = await updUserAddress(values);
 
@@ -61,7 +61,7 @@ const ShippingAddressForm = ({ address }: T_Props) => {
         <form
           method="post"
           className="space-y-4"
-          onSubmit={form.handleSubmit(onSubmit)}
+          onSubmit={form.handleSubmit(_onSubmit)}
         >
           {inputsStructure.map(({ label, name }) => (
             <div key={name} className="flex flex-col md:flex-row gap-5">
