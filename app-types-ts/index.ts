@@ -4,6 +4,8 @@ import {
   cartItemSchema,
   insertCartSchema,
   insertProductsSchema,
+  isertOrderItemSchema,
+  isertOrderSchema,
   paymentMethodSchema,
   shippingAddressSchema,
 } from "@/lib/validators";
@@ -40,3 +42,16 @@ export type T_ErrMessage = {
 export type T_Message = T_SuccessMessage | T_ErrMessage;
 
 export type T_PaymentMethod = z.infer<typeof paymentMethodSchema>;
+
+export type T_InsertOrderItem = z.infer<typeof isertOrderItemSchema>;
+export type T_InsertOrder = z.infer<typeof isertOrderSchema>;
+export type T_Order = T_InsertOrder & {
+  id: string;
+  createdAt: Date;
+  isPaid: boolean;
+  paidAt: Date | null;
+  isDelivered: boolean;
+  deliveredAt: Date | null;
+  orderItems: T_InsertOrderItem[];
+  user: { name: string; email: string };
+};
