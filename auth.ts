@@ -1,3 +1,4 @@
+import { cookies } from "next/headers";
 import NextAuth, { type NextAuthConfig } from "next-auth";
 import CredentialsProviders from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@auth/prisma-adapter";
@@ -60,8 +61,9 @@ export const config = {
       return session;
     },
 
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger, session }) {
       if (user) {
+        token.id = user.id;
         token.role = user.role;
 
         if (user.name === "NO_NAME") {
@@ -73,6 +75,35 @@ export const config = {
             data: { name: token.name },
           });
         }
+
+        if (trigger === "signIn" || trigger === "signUp") {
+          const cookiesObj = await cookies();
+          const sessionCartId = cookiesObj.get("sessionCartId")?.value;
+
+          if (sessionCartId) {
+            const sessionCart = await prisma.cart.findFirst({
+              where: { sessionCartId },
+            });
+
+            if (sessionCart) {
+              // Delete current user cart
+              await prisma.cart.deleteMany({
+                where: { userId: user.id },
+              });
+
+              // Assign new cart
+              await prisma.cart.update({
+                where: { id: sessionCart.id },
+                data: { userId: user.id },
+              });
+            }
+          }
+        }
+      }
+
+      // Handle session updates
+      if (session?.user.name && trigger === "update") {
+        token.name = session.user.name;
       }
 
       return token;
