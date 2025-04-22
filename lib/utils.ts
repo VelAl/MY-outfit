@@ -3,6 +3,8 @@ import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { ZodError } from "zod";
 
+import { T_ErrMessage, T_SuccessMessage } from "@/app-types-ts";
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
@@ -59,3 +61,12 @@ export const formatUSDPrice = (value: number | string) => {
     minimumFractionDigits: 2,
   }).format(+value);
 };
+
+export const createSuccessMsg = (message: string): T_SuccessMessage => ({
+  message,
+  success: true,
+});
+export const createErrMsg = (message: string): T_ErrMessage => ({
+  message,
+  success: false,
+});

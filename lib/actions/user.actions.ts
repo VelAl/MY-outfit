@@ -3,17 +3,22 @@
 import { isRedirectError } from "next/dist/client/components/redirect-error";
 import { hashSync } from "bcrypt-ts-edge";
 
-import { signIn, signOut } from "@/auth";
+import { T_Message, T_ShippingAddress } from "@/app-types-ts";
+import { auth, signIn, signOut } from "@/auth";
 import { prisma } from "@/db/prisma";
 
-import { formatErorr } from "../utils";
-import { signInFormSchema, signUpFormSchema } from "../validators";
+import { createErrMsg, createSuccessMsg, formatErorr } from "../utils";
+import {
+  shippingAddressSchema,
+  signInFormSchema,
+  signUpFormSchema,
+} from "../validators";
 
 // Sign in the user with credentials
 export const signInWithCreds = async (
   prevState: unknown,
   formData: FormData
-) => {
+): Promise<T_Message> => {
   try {
     const creds = signInFormSchema.parse({
       email: formData.get("email"),
@@ -22,13 +27,13 @@ export const signInWithCreds = async (
 
     await signIn("credentials", creds);
 
-    return { success: true, message: "Signed in successfully" };
+    return createSuccessMsg("Signed in successfully");
   } catch (error) {
     if (isRedirectError(error)) {
       throw error;
     }
 
-    return { success: false, message: "Invalid email or password" };
+    return createErrMsg("Invalid email or password");
   }
 };
 
@@ -38,7 +43,10 @@ export const signOutUser = async () => {
 };
 
 // Sign up user
-export const signUpUser = async (prevState: unknown, formData: FormData) => {
+export const signUpUser = async (
+  prevState: unknown,
+  formData: FormData
+): Promise<T_Message> => {
   const password = formData.get("password") as string;
 
   try {
@@ -59,16 +67,13 @@ export const signUpUser = async (prevState: unknown, formData: FormData) => {
 
     await signIn("credentials", { email: data.email, password });
 
-    return { success: true, message: "User registed successfully." };
+    return createSuccessMsg("User registed successfully.");
   } catch (error) {
     if (isRedirectError(error)) {
       throw error;
     }
 
-    return {
-      success: false,
-      message: formatErorr(error),
-    };
+    return createErrMsg(formatErorr(error));
   }
 };
 
@@ -81,4 +86,30 @@ export const getUserById = async (id: string) => {
   if (!user) throw new Error("User not found");
 
   return user;
+};
+
+// upd the user`s address
+export const updUserAddress = async (
+  data: T_ShippingAddress
+): Promise<T_Message> => {
+  try {
+    const session = await auth();
+
+    const currentUser = await prisma.user.findFirst({
+      where: { id: session?.user?.id },
+    });
+
+    if (!currentUser) throw new Error("User not found");
+
+    const address = shippingAddressSchema.parse(data);
+
+    await prisma.user.update({
+      where: { id: session?.user?.id },
+      data: { address },
+    });
+
+    return createSuccessMsg("User`s address updated successfully!");
+  } catch (error) {
+    return createErrMsg(formatErorr(error));
+  }
 };

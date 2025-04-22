@@ -27,3 +27,13 @@ export type T_Cart = z.infer<typeof insertCartSchema> & {
 };
 
 export type T_ShippingAddress = z.infer<typeof shippingAddressSchema>;
+
+export type T_SuccessMessage = {
+  success: true;
+  message: string;
+};
+export type T_ErrMessage = {
+  success: false;
+  message: string;
+};
+export type T_Message = T_SuccessMessage | T_ErrMessage;

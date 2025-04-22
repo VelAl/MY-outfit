@@ -1,4 +1,4 @@
-import { E_AppThemes, T_ShippingAddress } from "@/app-types-ts";
+import { E_AppThemes } from "@/app-types-ts";
 
 export const APP_NAME = process.env.NEXT_PUBLIC_APP_NAME || "MY-outfit";
 export const APP_DESCRIPTION =
@@ -14,12 +14,3 @@ export const appThemes: E_AppThemes[] = [
 ];
 
 export const LATEST_PRODS_LIMIT = Number(process.env.LATEST_PRODS_LIMIT || 4);
-
-// used as form default values in shipping aress page
-export const emptyShippingAddress: T_ShippingAddress = {
-  city: "",
-  country: "",
-  fullName: "",
-  postalCode: "",
-  streetAddress: "",
-};

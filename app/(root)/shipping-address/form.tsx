@@ -1,10 +1,11 @@
 "use client";
 
 import { useTransition } from "react";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowRight } from "lucide-react";
+import { toast } from "sonner";
 
 import { T_ShippingAddress } from "@/app-types-ts";
 import Spinner from "@/components/shared/spinner";
@@ -18,23 +19,14 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { emptyShippingAddress } from "@/lib/constants";
+import { updUserAddress } from "@/lib/actions/user.actions";
 import { shippingAddressSchema } from "@/lib/validators";
+
+import { emptyShippingAddress, inputsStructure } from "./helpers";
 
 type T_Props = {
   address: T_ShippingAddress | null;
 };
-
-const inputsStructure: {
-  name: keyof T_ShippingAddress;
-  label: string;
-}[] = [
-  { name: "fullName", label: "Full Name" },
-  { name: "streetAddress", label: "Address" },
-  { name: "city", label: "City" },
-  { name: "postalCode", label: "Postal Code" },
-  { name: "country", label: "Country" },
-] as const;
 
 const ShippingAddressForm = ({ address }: T_Props) => {
   const router = useRouter();
@@ -45,8 +37,17 @@ const ShippingAddressForm = ({ address }: T_Props) => {
     defaultValues: address || emptyShippingAddress,
   });
 
-  const onSubmit = (values: T_ShippingAddress) => {
-    console.log("values ===>", values);
+  const onSubmit: SubmitHandler<T_ShippingAddress> = async (values) => {
+    startTransition(async () => {
+      const res = await updUserAddress(values);
+
+      if (!res.success) {
+        toast.error(res.message);
+        return;
+      }
+
+      router.push("/payment-method");
+    });
   };
 
   return (

@@ -3,11 +3,17 @@
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 
-import { T_Cart, T_CartItem } from "@/app-types-ts";
+import { T_Cart, T_CartItem, T_Message } from "@/app-types-ts";
 import { auth } from "@/auth";
 import { prisma } from "@/db/prisma";
 
-import { convertToPlainObject, formatErorr, round2 } from "../utils";
+import {
+  convertToPlainObject,
+  createErrMsg,
+  createSuccessMsg,
+  formatErorr,
+  round2,
+} from "../utils";
 import { cartItemSchema, insertCartSchema } from "../validators";
 
 // Calculate cart prices
@@ -38,7 +44,7 @@ const _updCartInDB = async (cart: T_Cart) => {
   });
 };
 
-export const addItemToCart = async (data: T_CartItem) => {
+export const addItemToCart = async (data: T_CartItem): Promise<T_Message> => {
   try {
     // check for the cart cookie
     const sessionCartId = (await cookies()).get("sessionCartId")?.value;
@@ -75,7 +81,7 @@ export const addItemToCart = async (data: T_CartItem) => {
       // revalidate product page
       revalidatePath(`/product/${product.slug}`);
 
-      return { success: true, message: "Item has been added to the cart." };
+      return createSuccessMsg("Item has been added to the cart.");
     } else {
       // index of curent item in cart or -1
       const prodIndInCart = cart.items.findIndex(
@@ -99,15 +105,14 @@ export const addItemToCart = async (data: T_CartItem) => {
 
       revalidatePath(`/product/${product.slug}`);
 
-      return {
-        success: true,
-        message: `${product.name} - ${
+      return createSuccessMsg(
+        `${product.name} - ${
           prodIndInCart >= 0 ? "updated in the cart" : "added to the cart"
-        }`,
-      };
+        }`
+      );
     }
   } catch (error) {
-    return { success: false, message: formatErorr(error) };
+    return createErrMsg(formatErorr(error));
   }
 };
 
@@ -139,7 +144,9 @@ export const getMyCart = async (): Promise<T_Cart | undefined> => {
   });
 };
 
-export const removeItemFromCart = async (productId: string) => {
+export const removeItemFromCart = async (
+  productId: string
+): Promise<T_Message> => {
   try {
     //check for cart cookie
     const sessionCartId = (await cookies()).get("sessionCartId")?.value;
@@ -173,8 +180,8 @@ export const removeItemFromCart = async (productId: string) => {
 
     revalidatePath(`/product/${product.slug}`);
 
-    return { success: true, message: `${product.name} removed from the cart` };
+    return createSuccessMsg(`${product.name} removed from the cart`);
   } catch (error) {
-    return { success: false, message: formatErorr(error) };
+    return createErrMsg(formatErorr(error));
   }
 };
