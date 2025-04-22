@@ -4,6 +4,7 @@ import {
   cartItemSchema,
   insertCartSchema,
   insertProductsSchema,
+  paymentMethodSchema,
   shippingAddressSchema,
 } from "@/lib/validators";
 
@@ -37,3 +38,5 @@ export type T_ErrMessage = {
   message: string;
 };
 export type T_Message = T_SuccessMessage | T_ErrMessage;
+
+export type T_PaymentMethod = z.infer<typeof paymentMethodSchema>;

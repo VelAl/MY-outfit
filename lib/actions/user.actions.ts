@@ -3,12 +3,13 @@
 import { isRedirectError } from "next/dist/client/components/redirect-error";
 import { hashSync } from "bcrypt-ts-edge";
 
-import { T_Message, T_ShippingAddress } from "@/app-types-ts";
+import { T_Message, T_PaymentMethod, T_ShippingAddress } from "@/app-types-ts";
 import { auth, signIn, signOut } from "@/auth";
 import { prisma } from "@/db/prisma";
 
 import { createErrMsg, createSuccessMsg, formatErorr } from "../utils";
 import {
+  paymentMethodSchema,
   shippingAddressSchema,
   signInFormSchema,
   signUpFormSchema,
@@ -109,6 +110,29 @@ export const updUserAddress = async (
     });
 
     return createSuccessMsg("User`s address updated successfully!");
+  } catch (error) {
+    return createErrMsg(formatErorr(error));
+  }
+};
+
+//update user`s payment method
+export const updUserPaymentMethod = async (data: T_PaymentMethod) => {
+  try {
+    const session = await auth();
+    const curentUser = await prisma.user.findFirst({
+      where: { id: session?.user?.id },
+    });
+
+    if (!curentUser) throw new Error("User not found.");
+
+    const { type } = paymentMethodSchema.parse(data);
+
+    await prisma.user.update({
+      where: { id: curentUser.id },
+      data: { paymentMethod: type },
+    });
+
+    return createSuccessMsg("Payment method has been updated successfully!");
   } catch (error) {
     return createErrMsg(formatErorr(error));
   }

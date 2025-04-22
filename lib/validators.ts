@@ -1,5 +1,6 @@
 import { z } from "zod";
 
+import { PAYMENT_METHODS } from "./constants";
 import { fomatNumWithDecimals } from "./utils";
 
 const price = z
@@ -9,7 +10,7 @@ const price = z
     "Invalid price"
   );
 
-//_______CREATE_PRODUCT____________________________________________________
+//_______CREATE_PRODUCT________________________________________________
 export const insertProductsSchema = z.object({
   name: z.string().min(3, "Name has to be at least 3 characters"),
   slug: z.string().min(3, "Slug has to be at least 3 characters"),
@@ -28,13 +29,13 @@ export const insertProductsSchema = z.object({
   price,
 });
 
-//_______USER_SIGN_IN____________________________________________________________
+//_______USER_SIGN_IN_______________________________________________________
 export const signInFormSchema = z.object({
   email: z.string().email("Ivalid email"),
   password: z.string().min(6, "Password must be at least 6 characters"),
 });
 
-//_______USER_SIGN_UP____________________________________________________________
+//_______USER_SIGN_UP________________________________________________________
 export const signUpFormSchema = z
   .object({
     name: z.string().min(3, "Name must be at least 3 characters"),
@@ -49,7 +50,7 @@ export const signUpFormSchema = z
     path: ["confirmPassword"],
   });
 
-//_______CART_____________________________________________________________________
+//_______CART________________________________________________________________
 export const cartItemSchema = z.object({
   productId: z.string().min(1, "Product is required."),
   name: z.string().min(1, "Name is required."),
@@ -69,7 +70,7 @@ export const insertCartSchema = z.object({
   userId: z.string().optional().nullable(),
 });
 
-//_______SHIPPING_ADDRESS________________________________________________________
+//_______SHIPPING_ADDRESS____________________________________________________
 export const shippingAddressSchema = z.object({
   fullName: z.string().min(3, "Name must be at least 3 charecters"),
   streetAddress: z.string().min(3, "Address must be at least 3 charecters"),
@@ -79,3 +80,13 @@ export const shippingAddressSchema = z.object({
   lat: z.number().optional(),
   lng: z.number().optional(),
 });
+
+//_______PAYMENT_METHOD______________________________________________________
+export const paymentMethodSchema = z
+  .object({
+    type: z.string().min(1, "Payment method is required"),
+  })
+  .refine(({ type }) => PAYMENT_METHODS.includes(type), {
+    path: ["type"],
+    message: "Unknown payment method",
+  });
