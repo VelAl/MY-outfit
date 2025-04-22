@@ -133,7 +133,7 @@ const CartTable = ({ cart }: T_Props) => {
                 }
               >
                 {isPending ? <Spinner /> : <ArrowRight className="w-4 h-4" />}
-                Proceed to checkout
+                Proceed
               </Button>
             </CardContent>
           </Card>
