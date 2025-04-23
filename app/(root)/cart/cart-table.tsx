@@ -54,7 +54,7 @@ const CartTable = ({ cart }: T_Props) => {
       {!cart?.items.length ? (
         <div>
           Cart is empty.{" "}
-          <Link href="/product" className="underline">
+          <Link href="/" className="underline">
             Go shopping
           </Link>
         </div>
