@@ -92,7 +92,7 @@ export const paymentMethodSchema = z
   });
 
 //_______ORDER_______________________________________________________________
-export const isertOrderSchema = z.object({
+export const insertOrderSchema = z.object({
   userId: z.string().min(1, "User ID is required"),
   itemsPrice: price,
   shippingPrice: price,
@@ -105,7 +105,7 @@ export const isertOrderSchema = z.object({
 });
 
 // order item
-export const isertOrderItemSchema = z.object({
+export const insertOrderItemSchema = z.object({
   productId: z.string().min(1, "Product ID is required"),
   qty: z.number().min(1, "Quantity of product must be at least 1"),
   price,
