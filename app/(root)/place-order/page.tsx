@@ -11,6 +11,7 @@ import { getMyCart } from "@/lib/actions/cart.actions";
 import { getUserById } from "@/lib/actions/user.actions";
 import { formatUSDPrice } from "@/lib/utils";
 
+import PlaceOrderForm from "./form";
 import { orderSummaryStructure } from "./helpers";
 import OrderItemsTable from "./order-items-table";
 
@@ -85,6 +86,8 @@ const PlaceOrderPage = async () => {
                   <div>{formatUSDPrice(cart[field])}</div>
                 </div>
               ))}
+
+              <PlaceOrderForm />
             </CardContent>
           </Card>
         </div>
