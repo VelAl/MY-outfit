@@ -2,7 +2,7 @@
 
 import { isRedirectError } from "next/dist/client/components/redirect-error";
 
-import { T_Message } from "@/app-types-ts";
+import { T_Message, T_Order, T_ShippingAddress } from "@/app-types-ts";
 import { auth } from "@/auth";
 import { prisma } from "@/db/prisma";
 
@@ -98,7 +98,7 @@ export const createOrder = async (): Promise<
 };
 
 // get ORDER by ID
-export const getOrderById = async (id: string) => {
+export const getOrderById = async (id: string): Promise<T_Order | null> => {
   const order = await prisma.order.findFirst({
     where: { id },
     include: {
@@ -106,6 +106,13 @@ export const getOrderById = async (id: string) => {
       user: { select: { name: true, email: true } },
     },
   });
+  if (!order) return null;
 
-  return convertToPlainObject(order);
+  const { OrderItem, ...converted } = convertToPlainObject(order);
+
+  return {
+    ...converted,
+    shippingAddress: converted.shippingAddress as T_ShippingAddress,
+    orderItems: OrderItem,
+  };
 };

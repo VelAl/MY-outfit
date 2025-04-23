@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 
 import { getOrderById } from "@/lib/actions/order.actions";
 
+import OrderDetailsTable from "./order-details-table";
+
 export const metadata: Metadata = {
   title: "Order Details",
 };
@@ -17,6 +19,10 @@ export const OrderDetailPage = async ({ params }: T_Props) => {
   const order = await getOrderById(id);
   if (!order) notFound();
 
-  return <div>{+order.totalPrice}</div>;
+  return (
+    <div>
+      <OrderDetailsTable order={order} />
+    </div>
+  );
 };
 export default OrderDetailPage;

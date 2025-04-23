@@ -5,15 +5,14 @@ import { redirect } from "next/navigation";
 import { T_ShippingAddress } from "@/app-types-ts";
 import { auth } from "@/auth";
 import CheckoutSteps from "@/components/shared/checkout-steps";
+import OrderItemsTable from "@/components/shared/order/order-items-table";
+import OrderSummaryCard from "@/components/shared/order/order-summary-card";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { getMyCart } from "@/lib/actions/cart.actions";
 import { getUserById } from "@/lib/actions/user.actions";
-import { formatUSDPrice } from "@/lib/utils";
 
 import PlaceOrderForm from "./form";
-import { orderSummaryStructure } from "./helpers";
-import OrderItemsTable from "./order-items-table";
 
 export const metaData: Metadata = {
   title: "Place Order",
@@ -78,18 +77,9 @@ const PlaceOrderPage = async () => {
         </div>
 
         <div>
-          <Card className="p-2">
-            <CardContent className="p-4 gap-4 space-y-2">
-              {orderSummaryStructure.map(({ field, title }) => (
-                <div key={field} className="flex justify-between">
-                  <div>{title}</div>
-                  <div>{formatUSDPrice(cart[field])}</div>
-                </div>
-              ))}
-
-              <PlaceOrderForm />
-            </CardContent>
-          </Card>
+          <OrderSummaryCard entity={cart}>
+            <PlaceOrderForm />
+          </OrderSummaryCard>
         </div>
       </div>
     </>
