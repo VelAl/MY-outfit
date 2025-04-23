@@ -6,7 +6,12 @@ import { T_Message } from "@/app-types-ts";
 import { auth } from "@/auth";
 import { prisma } from "@/db/prisma";
 
-import { createErrMsg, createSuccessMsg, formatErorr } from "../utils";
+import {
+  convertToPlainObject,
+  createErrMsg,
+  createSuccessMsg,
+  formatErorr,
+} from "../utils";
 import { insertOrderSchema } from "../validators";
 
 import { getMyCart } from "./cart.actions";
@@ -90,4 +95,17 @@ export const createOrder = async (): Promise<
 
     return createErrMsg(formatErorr(error));
   }
+};
+
+// get ORDER by ID
+export const getOrderById = async (id: string) => {
+  const order = await prisma.order.findFirst({
+    where: { id },
+    include: {
+      OrderItem: true,
+      user: { select: { name: true, email: true } },
+    },
+  });
+
+  return convertToPlainObject(order);
 };
