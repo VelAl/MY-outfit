@@ -107,7 +107,7 @@ export const isertOrderSchema = z.object({
 // order item
 export const isertOrderItemSchema = z.object({
   productId: z.string().min(1, "Product ID is required"),
-  qnt: z.number().min(1, "Quantity of product must be at least 1"),
+  qty: z.number().min(1, "Quantity of product must be at least 1"),
   price,
   name: z.string().min(1, "Product name must be at least 1 character"),
   slug: z.string().min(1, "Product slug item is required"),
