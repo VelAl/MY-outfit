@@ -27,3 +27,5 @@ const generateAccessToken = async () => {
     throw new Error(errorMessage);
   }
 };
+
+export { generateAccessToken };
