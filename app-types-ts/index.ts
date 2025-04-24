@@ -7,6 +7,7 @@ import {
   insertOrderSchema,
   insertProductsSchema,
   paymentMethodSchema,
+  paymentResultSchema,
   shippingAddressSchema,
 } from "@/lib/validators";
 
@@ -42,6 +43,7 @@ export type T_ErrMessage = {
 export type T_Message = T_SuccessMessage | T_ErrMessage;
 
 export type T_PaymentMethod = z.infer<typeof paymentMethodSchema>;
+export type T_PaymentResult = z.infer<typeof paymentResultSchema>;
 
 export type T_InsertOrderItem = z.infer<typeof insertOrderItemSchema>;
 export type T_InsertOrder = z.infer<typeof insertOrderSchema>;

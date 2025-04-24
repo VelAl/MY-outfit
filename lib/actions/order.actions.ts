@@ -6,6 +6,7 @@ import { T_Message, T_Order, T_ShippingAddress } from "@/app-types-ts";
 import { auth } from "@/auth";
 import { prisma } from "@/db/prisma";
 
+import { paypal } from "../paypal";
 import {
   convertToPlainObject,
   createErrMsg,
@@ -115,4 +116,39 @@ export const getOrderById = async (id: string): Promise<T_Order | null> => {
     shippingAddress: converted.shippingAddress as T_ShippingAddress,
     orderItems: OrderItem,
   };
+};
+
+// create new PayPal order
+export const createPayPalOrder = async (orderId: string) => {
+  try {
+    // get order from DB
+    const order = await prisma.order.findFirst({
+      where: { id: orderId },
+    });
+
+    if (!order) throw new Error("Order not found");
+
+    // create new PayPal order
+    const paypalOrder = await paypal.createOrder(+order.totalPrice);
+
+    // update order with paypal order id
+    await prisma.order.update({
+      where: { id: orderId },
+      data: {
+        paymentResult: {
+          id: paypalOrder.id,
+          email_address: "",
+          status: "",
+          pricePaid: 0,
+        },
+      },
+    });
+
+    return {
+      ...createSuccessMsg("PayPal order created successfully"),
+      data: paypalOrder.id as string,
+    };
+  } catch (error) {
+    return createErrMsg(formatErorr(error));
+  }
 };

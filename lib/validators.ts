@@ -91,6 +91,13 @@ export const paymentMethodSchema = z
     message: "Unknown payment method",
   });
 
+export const paymentResultSchema = z.object({
+  id: z.string(),
+  status: z.string(),
+  email_address: z.string().email(),
+  pricePaid: z.string(),
+});
+
 //_______ORDER_______________________________________________________________
 export const insertOrderSchema = z.object({
   userId: z.string().min(1, "User ID is required"),
