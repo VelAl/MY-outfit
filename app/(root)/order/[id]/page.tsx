@@ -21,7 +21,10 @@ export const OrderDetailPage = async ({ params }: T_Props) => {
 
   return (
     <div>
-      <OrderDetailsTable order={order} />
+      <OrderDetailsTable
+        order={order}
+        paypalClientId={process.env.PAYPAL_CLIENT_ID || "sb"}
+      />
     </div>
   );
 };
