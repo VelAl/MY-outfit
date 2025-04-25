@@ -1,5 +1,6 @@
 import { Prisma } from "@prisma/client";
 import { type ClassValue, clsx } from "clsx";
+import qs from "query-string";
 import { twMerge } from "tailwind-merge";
 import { ZodError } from "zod";
 
@@ -112,4 +113,18 @@ export const formatDateTime = (dateString: Date) => {
     dateOnly: formattedDate,
     timeOnly: formattedTime,
   };
+};
+
+//form the pagination links
+type T_FormUrlQueryArgs = { params: string; key: string; value: string | null };
+export const formUrlQuery = ({ params, key, value }: T_FormUrlQueryArgs) => {
+  const query = qs.parse(params);
+  query[key] = value;
+  return qs.stringifyUrl(
+    {
+      query,
+      url: window.location.pathname,
+    },
+    { skipNull: true }
+  );
 };

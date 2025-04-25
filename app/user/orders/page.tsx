@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 
+import Pagination from "@/components/shared/pagination";
 import {
   Table,
   TableBody,
@@ -44,6 +45,14 @@ const OrdersPage = async ({ searchParams }: T_Props) => {
             ))}
           </TableBody>
         </Table>
+        <div className="flex w-full mt-8 justify-center">
+          {!!orders.totalPages && (
+            <Pagination
+              page={Number(page) || 1}
+              totalPages={orders.totalPages}
+            />
+          )}
+        </div>
       </div>
     </div>
   );
