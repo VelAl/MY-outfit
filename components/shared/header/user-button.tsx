@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { type Session } from "next-auth";
 
 import { auth } from "@/auth";
@@ -28,7 +29,7 @@ const UserButton = async () => {
           </div>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-56" align="end" forceMount>
-          <DropdownMenuLabel className="font-normal">
+          <DropdownMenuLabel className="font-normal border-b">
             <div className="flex flex-col space-y-1">
               <div className="text-sm font-md leading-none">
                 {session.user?.name}
@@ -40,7 +41,19 @@ const UserButton = async () => {
             </div>
           </DropdownMenuLabel>
 
-          <DropdownMenuItem className="p-0 mb-1">
+          <DropdownMenuItem className="p-0">
+            <Link href={"/user/profile"} className="w-full p-2 hover:bg-muted">
+              Profile
+            </Link>
+          </DropdownMenuItem>
+
+          <DropdownMenuItem className="p-0">
+            <Link href={"/user/orders"} className="w-full p-2 hover:bg-muted">
+              Orders history
+            </Link>
+          </DropdownMenuItem>
+
+          <DropdownMenuItem className="p-0 my-2">
             <form action={signOutUser} className="w-full">
               <Button
                 type="submit"
