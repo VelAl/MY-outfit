@@ -7,8 +7,8 @@ viewBox="0 0 2048 2048"
  <defs>
   <style type="text/css">
    <![CDATA[
-    .fil0 {fill:#FFCA28}
-    .fil1 {fill:#FFFFFE;fill-rule:nonzero}
+    .fil0 {fill:#00B0FF} /* голубой цвет */
+    .fil1 {fill:#B3E5FC;fill-rule:nonzero} /* светлый голубой цвет */
    ]]>
   </style>
  </defs>
@@ -21,3 +21,4 @@ viewBox="0 0 2048 2048"
   </g>
  </g>
 </svg>
+
