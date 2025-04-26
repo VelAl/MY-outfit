@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { isRedirectError } from "next/dist/client/components/redirect-error";
+import { Prisma } from "@prisma/client";
 
 import {
   T_Message,
@@ -273,5 +274,45 @@ export const getUserOrders = async ({
     data,
     totalCount,
     totalPages: Math.ceil(totalCount / limit),
+  };
+};
+
+// get sales data & order summary
+export const getOrdersSummary = async () => {
+  // get counts for eash resourses
+  const ordersCount = await prisma.order.count();
+  const productsCount = await prisma.product.count();
+  const usersCount = await prisma.user.count();
+
+  // calculate the total sales
+  const totalSales = await prisma.order.aggregate({
+    _sum: { totalPrice: true },
+  });
+
+  // get monthly sales
+  const salesDataRaw = await prisma.$queryRaw<
+    { month: string; totalSales: Prisma.Decimal }[]
+  >`SELECT to_char("createdAt", 'MM/YY') as "month",
+    GROUP BY to_char("createdAt", 'MM/YY')`;
+
+  const salesData = salesDataRaw.map(({ month, totalSales }) => ({
+    month,
+    totalSales: +totalSales,
+  }));
+
+  // get latest orders
+  const latestSales = prisma.order.findMany({
+    orderBy: { createdAt: "desc" },
+    take: 6,
+    include: { user: { select: { name: true } } },
+  });
+
+  return {
+    salesData,
+    latestSales,
+    ordersCount,
+    productsCount,
+    usersCount,
+    totalSales,
   };
 };
