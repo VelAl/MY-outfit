@@ -21,6 +21,7 @@ export default function UserLayout({
               height={48}
               src="/images/logo.svg"
               alt={`${APP_NAME}_logo`}
+              priority
             />
           </Link>
 

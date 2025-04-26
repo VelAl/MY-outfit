@@ -115,26 +115,47 @@ export const updUserAddress = async (
   }
 };
 
-//update user`s payment method
+// update user`s payment method
 export const updUserPaymentMethod = async (
   data: T_PaymentMethod
 ): Promise<T_Message> => {
   try {
     const session = await auth();
-    const curentUser = await prisma.user.findFirst({
+    const currentUser = await prisma.user.findFirst({
       where: { id: session?.user?.id },
     });
 
-    if (!curentUser) throw new Error("User not found.");
+    if (!currentUser) throw new Error("User not found.");
 
     const { type } = paymentMethodSchema.parse(data);
 
     await prisma.user.update({
-      where: { id: curentUser.id },
+      where: { id: currentUser.id },
       data: { paymentMethod: type },
     });
 
     return createSuccessMsg("Payment method has been updated successfully!");
+  } catch (error) {
+    return createErrMsg(formatErorr(error));
+  }
+};
+
+// update user`s profile
+type T_UpdUserProfileProp = { name: string; email: string };
+export const updUserProfile = async (data: T_UpdUserProfileProp) => {
+  try {
+    const session = await auth();
+    const currentUser = await prisma.user.findFirst({
+      where: { id: session?.user?.id },
+    });
+    if (!currentUser) throw new Error("User not found.");
+
+    await prisma.user.update({
+      data,
+      where: { id: currentUser.id },
+    });
+
+    return createSuccessMsg("Profile has been updated successfully!");
   } catch (error) {
     return createErrMsg(formatErorr(error));
   }

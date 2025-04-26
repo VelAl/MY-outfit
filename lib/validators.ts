@@ -29,13 +29,12 @@ export const insertProductsSchema = z.object({
   price,
 });
 
-//_______USER_SIGN_IN_______________________________________________________
+//_______USER________________________________________________________________
 export const signInFormSchema = z.object({
   email: z.string().email("Ivalid email"),
   password: z.string().min(6, "Password must be at least 6 characters"),
 });
 
-//_______USER_SIGN_UP________________________________________________________
 export const signUpFormSchema = z
   .object({
     name: z.string().min(3, "Name must be at least 3 characters"),
@@ -49,6 +48,11 @@ export const signUpFormSchema = z
     message: "Passwords must match",
     path: ["confirmPassword"],
   });
+
+export const updUserProfileSchema = z.object({
+  name: z.string().min(3, "Name must be at least 3 characters"),
+  email: z.string().email("Ivalid email"),
+});
 
 //_______CART________________________________________________________________
 export const cartItemSchema = z.object({
