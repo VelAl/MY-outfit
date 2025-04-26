@@ -50,7 +50,7 @@ export const config = {
     async session({ session, user, trigger, token }) {
       // Set the user ID from the token
       session.user.id = token.sub as string;
-      session.user.role = token.role;
+      session.user.role = token.role as string;
       session.user.name = token.name;
 
       // if the an upd? set the user name
