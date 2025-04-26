@@ -293,6 +293,7 @@ export const getOrdersSummary = async () => {
   const salesDataRaw = await prisma.$queryRaw<
     { month: string; totalSales: Prisma.Decimal }[]
   >`SELECT to_char("createdAt", 'MM/YY') as "month",
+    sum("totalPrice") as "totalSales" FROM "Order"
     GROUP BY to_char("createdAt", 'MM/YY')`;
 
   const salesData = salesDataRaw.map(({ month, totalSales }) => ({
@@ -301,7 +302,7 @@ export const getOrdersSummary = async () => {
   }));
 
   // get latest orders
-  const latestSales = prisma.order.findMany({
+  const latestSales = await prisma.order.findMany({
     orderBy: { createdAt: "desc" },
     take: 6,
     include: { user: { select: { name: true } } },

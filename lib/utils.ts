@@ -63,6 +63,9 @@ export const formatUSDPrice = (value: number | string) => {
   }).format(+value);
 };
 
+export const NUMBER_FORMATER = new Intl.NumberFormat("en-US");
+export const formatNumber = (val: number) => NUMBER_FORMATER.format(val);
+
 export const createSuccessMsg = (message: string): T_SuccessMessage => ({
   message,
   success: true,
