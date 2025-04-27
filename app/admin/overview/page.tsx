@@ -1,6 +1,4 @@
 import { Metadata } from "next";
-import Link from "next/link";
-import { Eye } from "lucide-react";
 
 import { auth } from "@/auth";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -13,9 +11,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { getOrdersSummary } from "@/lib/actions/order.actions";
-import { formatDateTime, formatUSDPrice } from "@/lib/utils";
 
-import { statisticsStructure } from "./helpers";
+import { statisticsStructure, tableStructure } from "./helpers";
 
 export const metadata: Metadata = {
   title: "Admin Dashboard",
@@ -65,34 +62,21 @@ const OverviewPage = async () => {
           </CardHeader>
 
           <CardContent>
-            <Table>
+            <Table >
               <TableHeader>
                 <TableRow>
-                  <TableHead>BUYER</TableHead>
-                  <TableHead>DATE</TableHead>
-                  <TableHead>TOTAL</TableHead>
-                  <TableHead></TableHead>
+                  {tableStructure.map(({ title }) => (
+                    <TableHead className="text-sm" key={title}>{title}</TableHead>
+                  ))}
                 </TableRow>
               </TableHeader>
 
               <TableBody>
                 {summary.latestSales.map((order) => (
                   <TableRow key={order.id}>
-                    <TableCell>{order?.user?.name || 'Deleted User'}</TableCell>
-                    <TableCell>
-                      {formatDateTime(order.createdAt).dateTime}
-                    </TableCell>
-                    <TableCell>{formatUSDPrice(order.totalPrice)}</TableCell>
-                    <TableCell>
-                      <div className="flex justify-end text-primary">
-                        <Link
-                          href={`/order/${order.id}`}
-                          className="transition-transform duration-200 hover:scale-[1.2]"
-                        >
-                          <Eye />
-                        </Link>
-                      </div>
-                    </TableCell>
+                    {tableStructure.map(({ getCell, title }) => (
+                      <TableCell key={title}>{getCell(order)}</TableCell>
+                    ))}
                   </TableRow>
                 ))}
               </TableBody>

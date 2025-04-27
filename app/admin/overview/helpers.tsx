@@ -1,8 +1,15 @@
 import { ReactNode } from "react";
-import { BadgeDollarSign, Barcode, CreditCardIcon, Users } from "lucide-react";
+import Link from "next/link";
+import {
+  BadgeDollarSign,
+  Barcode,
+  CreditCardIcon,
+  Eye,
+  Users,
+} from "lucide-react";
 
 import { getOrdersSummary } from "@/lib/actions/order.actions";
-import { formatNumber, formatUSDPrice } from "@/lib/utils";
+import { formatDateTime, formatNumber, formatUSDPrice } from "@/lib/utils";
 
 type T_GetOrdersSummary_Res = Awaited<ReturnType<typeof getOrdersSummary>>;
 
@@ -28,9 +35,38 @@ export const statisticsStructure: {
   },
   {
     title: "Products",
-    Icon: 
-    <Barcode />
-    ,
-    getter: ({productsCount}) => formatNumber(productsCount),
+    Icon: <Barcode />,
+    getter: ({ productsCount }) => formatNumber(productsCount),
+  },
+];
+
+export const tableStructure: {
+  title: string;
+  getCell: (order: T_GetOrdersSummary_Res["latestSales"][number]) => ReactNode;
+}[] = [
+  {
+    title: "BUYER",
+    getCell: ({ user }) => user?.name || "Deleted User",
+  },
+  {
+    title: "DATE",
+    getCell: ({ createdAt }) => formatDateTime(createdAt).dateTime,
+  },
+  {
+    title: "TOTAL",
+    getCell: ({ totalPrice }) => formatUSDPrice(totalPrice),
+  },
+  {
+    title: "",
+    getCell: ({ id }) => (
+      <div className="flex justify-end text-primary">
+        <Link
+          href={`/order/${id}`}
+          className="transition-transform duration-200 hover:scale-[1.2]"
+        >
+          <Eye />
+        </Link>
+      </div>
+    ),
   },
 ];
