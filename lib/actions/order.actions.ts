@@ -317,3 +317,25 @@ export const getOrdersSummary = async () => {
     totalSales,
   };
 };
+
+// get all orders
+export const getAllOrders = async ({
+  limit = PAGE_SIZE,
+  pageNumber,
+}: {
+  limit?: number;
+  pageNumber: number;
+}) => {
+  const data = await prisma.order.findMany({
+    orderBy: { createdAt: "desc" },
+    take: limit,
+    skip: (pageNumber - 1) * limit,
+    include: { user: { select: { name: true } } },
+  });
+
+  const totalCount = await prisma.order.count();
+  return {
+    data,
+    totalPages: Math.ceil(totalCount / limit),
+  };
+};
