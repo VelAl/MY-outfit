@@ -385,7 +385,7 @@ export const updateOrderToDelivered = async (id: string) => {
 
     revalidatePath(`/order/${id}`);
 
-    return createSuccessMsg("The order is marked as delivered");
+    return createSuccessMsg("The Order is marked as delivered");
   } catch (err) {
     return createErrMsg(formatErorr(err));
   }
