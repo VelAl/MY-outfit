@@ -195,7 +195,7 @@ export const approvePayPalOrder = async (
 
     revalidatePath(`/order/${orderId}`);
 
-    return createSuccessMsg("The Order has been payd successfully!");
+    return createSuccessMsg("The Order has been paid successfully!");
   } catch (error) {
     return createErrMsg(formatErorr(error));
   }
@@ -353,5 +353,40 @@ export const deleteOrder = async (id: string) => {
     return createSuccessMsg("The order has been deleted successfully.");
   } catch (error) {
     return createErrMsg(formatErorr(error));
+  }
+};
+
+// update order to paid (cashe on delivery)
+export const updateOrderToPaidCOD = async (orderId: string) => {
+  try {
+    await updateOrderToPaid({ orderId });
+
+    revalidatePath(`/order/${orderId}`);
+
+    return createSuccessMsg("the Order marked as paid!");
+  } catch (err) {
+    return createErrMsg(formatErorr(err));
+  }
+};
+
+// update order to delivered
+export const updateOrderToDelivered = async (id: string) => {
+  try {
+    const order = await prisma.order.findFirst({
+      where: { id },
+    });
+    if (!order) throw new Error("Order not found");
+    if (!order.isPaid) throw new Error("Order is not paid!");
+
+    await prisma.order.update({
+      where: { id },
+      data: { isDelivered: true, deliveredAt: new Date() },
+    });
+
+    revalidatePath(`/order/${id}`);
+
+    return createSuccessMsg("The order is marked as delivered");
+  } catch (err) {
+    return createErrMsg(formatErorr(err));
   }
 };
