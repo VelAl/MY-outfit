@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/table";
 import { getOrdersSummary } from "@/lib/actions/order.actions";
 
+import Charts from "./charts";
 import { statisticsStructure, tableStructure } from "./helpers";
 
 export const metadata: Metadata = {
@@ -50,23 +51,27 @@ const OverviewPage = async () => {
       <div className="grid gap-4 lg:grid-cols-7">
         <Card className="lg:col-span-4">
           <CardHeader>
-            <CardTitle>overview</CardTitle>
+            <CardTitle>Overview</CardTitle>
           </CardHeader>
 
-          <CardContent>{/* CGART HERE*/}</CardContent>
+          <CardContent>
+            <Charts data={{ salesData: summary.salesData }} />
+          </CardContent>
         </Card>
 
         <Card className="lg:col-span-3">
           <CardHeader>
-            <CardTitle>recent sales</CardTitle>
+            <CardTitle>Recent Sales</CardTitle>
           </CardHeader>
 
           <CardContent>
-            <Table >
+            <Table>
               <TableHeader>
                 <TableRow>
                   {tableStructure.map(({ title }) => (
-                    <TableHead className="text-sm" key={title}>{title}</TableHead>
+                    <TableHead className="text-sm" key={title}>
+                      {title}
+                    </TableHead>
                   ))}
                 </TableRow>
               </TableHeader>
