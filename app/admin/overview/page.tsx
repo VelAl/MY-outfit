@@ -1,15 +1,8 @@
 import { Metadata } from "next";
 
 import { auth } from "@/auth";
+import AppTable from "@/components/shared/appTable";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { getOrdersSummary } from "@/lib/actions/order.actions";
 
 import Charts from "./charts";
@@ -65,27 +58,7 @@ const OverviewPage = async () => {
           </CardHeader>
 
           <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  {tableStructure.map(({ title }) => (
-                    <TableHead className="text-sm" key={title}>
-                      {title}
-                    </TableHead>
-                  ))}
-                </TableRow>
-              </TableHeader>
-
-              <TableBody>
-                {summary.latestSales.map((order) => (
-                  <TableRow key={order.id}>
-                    {tableStructure.map(({ getCell, title }) => (
-                      <TableCell key={title}>{getCell(order)}</TableCell>
-                    ))}
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+            <AppTable columns={tableStructure} entities={summary.latestSales} />
           </CardContent>
         </Card>
       </div>

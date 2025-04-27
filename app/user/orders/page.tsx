@@ -1,14 +1,7 @@
 import { Metadata } from "next";
 
+import AppTable from "@/components/shared/appTable";
 import Pagination from "@/components/shared/pagination";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { getUserOrders } from "@/lib/actions/order.actions";
 
 import { tableRows } from "./helpers";
@@ -26,25 +19,8 @@ const OrdersPage = async ({ searchParams }: T_Props) => {
     <div className="space-y-2">
       <h2 className="h2-bold">Orders ({orders.totalCount})</h2>
       <div className="overflow-x-auto">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              {tableRows.map(({ title }) => (
-                <TableHead key={title}>{title}</TableHead>
-              ))}
-            </TableRow>
-          </TableHeader>
+        <AppTable columns={tableRows} entities={orders.data} />
 
-          <TableBody>
-            {orders.data.map((order) => (
-              <TableRow key={order.id}>
-                {tableRows.map(({ title, getCell }) => (
-                  <TableCell key={title}>{getCell(order)}</TableCell>
-                ))}
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
         <div className="flex w-full mt-8 justify-center">
           {!!orders.totalPages && (
             <Pagination
