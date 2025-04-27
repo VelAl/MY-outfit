@@ -1,11 +1,12 @@
 import { Metadata } from "next";
 
-import { tableRows } from "@/app/user/orders/helpers";
 import { auth } from "@/auth";
 import AppTable from "@/components/shared/appTable";
 import Pagination from "@/components/shared/pagination";
 import { getAllOrders } from "@/lib/actions/order.actions";
 import { PAGE_SIZE } from "@/lib/constants";
+
+import { tableRows } from "./helpers";
 
 export const metadata: Metadata = {
   title: "Admin Orders",

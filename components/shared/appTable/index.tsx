@@ -23,7 +23,6 @@ function AppTable<T extends Record<string, unknown>>({
   columns,
   entities,
   keyName = "id", //name of property with unique identifier used as key in the TableRow component
-
 }: T_Props<T>) {
   return (
     <Table>
