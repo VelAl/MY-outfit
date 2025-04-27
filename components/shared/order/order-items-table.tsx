@@ -11,7 +11,7 @@ type T_Props = {
   items: T_Cart["items"];
 };
 
-export const columns: {
+const columns: {
   title: string;
   getCell: (product: T_Cart["items"][number]) => ReactNode;
 }[] = [

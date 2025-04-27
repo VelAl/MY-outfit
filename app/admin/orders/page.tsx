@@ -1,6 +1,9 @@
 import { Metadata } from "next";
 
+import { tableRows } from "@/app/user/orders/helpers";
 import { auth } from "@/auth";
+import AppTable from "@/components/shared/appTable";
+import Pagination from "@/components/shared/pagination";
 import { getAllOrders } from "@/lib/actions/order.actions";
 import { PAGE_SIZE } from "@/lib/constants";
 
@@ -21,10 +24,25 @@ const AllOrdersPage = async ({ searchParams }: T_Props) => {
 
   const { page = "1" } = await searchParams;
 
-  const {data} = await getAllOrders({ pageNumber: +page, limit: PAGE_SIZE });
+  const { data, totalCount, totalPages } = await getAllOrders({
+    pageNumber: +page,
+    limit: PAGE_SIZE,
+  });
 
-  console.log('orders ===>', data);
+  return (
+    <div className="space-y-2">
+      <h2 className="h2-bold">Orders ({totalCount})</h2>
+      <div className="overflow-x-auto">
+        <AppTable columns={tableRows} entities={data} />
 
-  return <div>page</div>;
+        <div className="flex w-full mt-8 justify-center">
+          {!!totalPages && (
+            <Pagination page={Number(page) || 1} totalPages={totalPages} />
+          )}
+        </div>
+      </div>
+    </div>
+  );
 };
+
 export default AllOrdersPage;
