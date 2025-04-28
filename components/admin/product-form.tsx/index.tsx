@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import slugify from "slugify";
 
 import { T_AddProduct, T_Product } from "@/app-types-ts";
+import AppFormInput from "@/components/shared/form-input";
 import Spinner from "@/components/shared/spinner";
 import { Button } from "@/components/ui/button";
 import {
@@ -16,26 +17,14 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { insertProductsSchema } from "@/lib/validators";
+
+import { emptyProduct } from "./helpers";
 
 type T_PropsUpd = { type: "Update"; product: T_Product };
 type T_PropsCraete = { type: "Create"; product?: undefined };
 type T_Props = T_PropsCraete | T_PropsUpd;
-
-const emptyProduct: T_AddProduct = {
-  banner: null,
-  brand: "",
-  category: "",
-  description: "",
-  images: [],
-  isFeatured: false,
-  name: "",
-  price: "0",
-  slug: "",
-  stock: 0,
-};
 
 export const NewProductForm = ({ type, product }: T_Props) => {
   const router = useRouter();
@@ -50,20 +39,8 @@ export const NewProductForm = ({ type, product }: T_Props) => {
       <form className="space-y-4">
         <div className="flex flex-col md:flex-row gap-5 items-start">
           {/* NAME */}
-          <FormField
-            control={form.control}
-            name={"name"}
-            render={({ field }) => (
-              <FormItem className="w-full">
-                <FormLabel>Name</FormLabel>
-                <FormControl>
-                  <Input placeholder={`Enter name`} {...field} />
-                </FormControl>
+          <AppFormInput control={form.control} name="name" />
 
-                <FormMessage />
-              </FormItem>
-            )}
-          />
           {/* SLUG */}
           <div className="w-full flex items-end">
             <Button
@@ -78,96 +55,37 @@ export const NewProductForm = ({ type, product }: T_Props) => {
             >
               Slugify name
             </Button>
-            <FormField
+            <AppFormInput
               control={form.control}
-              name={"slug"}
-              render={({ field }) => (
-                <FormItem className="w-full">
-                  <FormLabel className="-ml-28">Slug</FormLabel>
-                  <FormControl>
-                    <Input placeholder={`Enter slug`} {...field} />
-                  </FormControl>
-
-                  <FormMessage />
-                </FormItem>
-              )}
+              name="slug"
+              labelClassname="-ml-26"
             />
           </div>
         </div>
 
         <div className="flex flex-col md:flex-row gap-5">
           {/* CATEGORY */}
-          <FormField
-            control={form.control}
-            name={"category"}
-            render={({ field }) => (
-              <FormItem className="w-full">
-                <FormLabel>Category</FormLabel>
-                <FormControl>
-                  <Input placeholder={`Enter category`} {...field} />
-                </FormControl>
+          <AppFormInput control={form.control} name="category" />
 
-                <FormMessage />
-              </FormItem>
-            )}
-          />
           {/* BRAND */}
-          <FormField
-            control={form.control}
-            name={"brand"}
-            render={({ field }) => (
-              <FormItem className="w-full">
-                <FormLabel>Brand</FormLabel>
-                <FormControl>
-                  <Input placeholder={`Enter brand`} {...field} />
-                </FormControl>
-
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          <AppFormInput control={form.control} name="brand" />
         </div>
 
         <div className="flex flex-col md:flex-row gap-5">
           {/* PRICE */}
-          <FormField
+          <AppFormInput
             control={form.control}
-            name={"price"}
-            render={({ field }) => (
-              <FormItem className="w-full">
-                <FormLabel>Price</FormLabel>
-                <FormControl>
-                  <Input
-                    type="number"
-                    min={0}
-                    placeholder={`Enter price`}
-                    {...field}
-                  />
-                </FormControl>
-
-                <FormMessage />
-              </FormItem>
-            )}
+            name="price"
+            type="number"
+            min={0}
           />
-          {/* STOCK */}
-          <FormField
-            control={form.control}
-            name={"stock"}
-            render={({ field }) => (
-              <FormItem className="w-full">
-                <FormLabel>Stock</FormLabel>
-                <FormControl>
-                  <Input
-                    type="number"
-                    min={0}
-                    placeholder={`Enter stock`}
-                    {...field}
-                  />
-                </FormControl>
 
-                <FormMessage />
-              </FormItem>
-            )}
+          {/* STOCK */}
+          <AppFormInput
+            control={form.control}
+            name="stock"
+            type="number"
+            min={0}
           />
         </div>
 
