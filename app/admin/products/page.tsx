@@ -31,7 +31,7 @@ const AdminProductsPage = async ({ searchParams }: T_Props) => {
         <h1 className="h2-bold">Products({total})</h1>
 
         <Button asChild>
-          <Link href="/admin/product/crate">
+          <Link href="/admin/products/create">
             <Plus /> Add New
           </Link>
         </Button>
