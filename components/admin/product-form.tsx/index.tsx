@@ -1,6 +1,7 @@
 "use client";
 
 import { useForm } from "react-hook-form";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import slugify from "slugify";
@@ -10,6 +11,7 @@ import { T_AddProduct, T_Message, T_Product } from "@/app-types-ts";
 import AppFormInput from "@/components/shared/form-input";
 import Spinner from "@/components/shared/spinner";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -20,13 +22,14 @@ import {
 } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
 import { createProduct, updataProduct } from "@/lib/actions/product.actions";
+import { UploadButton } from "@/lib/uploadthing";
 import { insertProductsSchema } from "@/lib/validators";
 
 import { emptyProduct } from "./helpers";
 
-type T_PropsUpd = { type: "Update"; product: T_Product };
-type T_PropsCraete = { type: "Create"; product?: undefined };
-type T_Props = T_PropsCraete | T_PropsUpd;
+type T_Props =
+  | { type: "Update"; product: T_Product }
+  | { type: "Create"; product?: undefined };
 
 export const NewProductForm = ({ type, product }: T_Props) => {
   const router = useRouter();
@@ -36,6 +39,8 @@ export const NewProductForm = ({ type, product }: T_Props) => {
     defaultValues: product || emptyProduct,
   });
 
+  const images = form.watch("images");
+
   const _handleResponse = (res: T_Message) => {
     if (res.success) {
       toast.success(res.message);
@@ -44,7 +49,7 @@ export const NewProductForm = ({ type, product }: T_Props) => {
       toast.error(res.message);
     }
   };
-  
+
   const _handleCreate = async (values: T_AddProduct) => {
     const res = await createProduct(values);
     _handleResponse(res);
@@ -100,12 +105,7 @@ export const NewProductForm = ({ type, product }: T_Props) => {
 
         <div className="flex flex-col md:flex-row gap-5">
           {/* PRICE */}
-          <AppFormInput
-            control={form.control}
-            name="price"
-            type="number"
-            min={0}
-          />
+          <AppFormInput control={form.control} name="price" />
 
           {/* STOCK */}
           <AppFormInput
@@ -118,6 +118,50 @@ export const NewProductForm = ({ type, product }: T_Props) => {
 
         <div className="upload-field flex flex-col md:flex-row gap-5">
           {/* IMAGES */}
+
+          <FormField
+            control={form.control}
+            name={"images"}
+            render={() => (
+              <FormItem className="w-full">
+                <FormLabel>Images</FormLabel>
+                <Card className="rounded-sm p-0">
+                  <CardContent className="space-y-2 mt-2 min-h-28 relative">
+                    <div className="flex-start space-x-2">
+                      {images.map((image) => (
+                        <Image
+                          className="w-20 h-20 object-cover object-center rounded-sm"
+                          alt="product img"
+                          key={image}
+                          src={image}
+                          width={100}
+                          height={100}
+                        />
+                      ))}
+
+                      <FormControl className="absolute right-4 bottom-2">
+                        <UploadButton
+                          className="bg-secondary rounded-sm px-2 pb-2"
+                          endpoint="imageUploader"
+                          onClientUploadComplete={([{ url }]: {
+                            url: string;
+                          }[]) => {
+                            form.setValue("images", [...images, url]);
+                            form.trigger("images");
+                          }}
+                          onUploadError={(err) => {
+                            toast.error(err.message);
+                          }}
+                        />
+                      </FormControl>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
         </div>
 
         <div className="upload-field">{/* IS FEATURED */}</div>
