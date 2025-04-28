@@ -32,7 +32,7 @@ export const formatErorr = (err: unknown) => {
         const field = (err.meta?.target as string[])?.[0] || "Field";
         return `${field} is already in use`;
       case "P2025":
-        return "Searched product to delete does not exist.";
+        return "The requested product does not exist.";
       default:
         return `Prisma error: ${err.code}. ${
           err.message || "Something went wrong..."

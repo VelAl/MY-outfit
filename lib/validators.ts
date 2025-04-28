@@ -10,7 +10,7 @@ const price = z
     "Invalid price"
   );
 
-//_______CREATE_PRODUCT________________________________________________
+//_______PRODUCT_________________________________________________________
 export const insertProductsSchema = z.object({
   name: z.string().min(3, "Name has to be at least 3 characters"),
   slug: z.string().min(3, "Slug has to be at least 3 characters"),
@@ -27,6 +27,10 @@ export const insertProductsSchema = z.object({
   isFeatured: z.boolean(),
   banner: z.string().nullable(),
   price,
+});
+
+export const updateProductSchema = insertProductsSchema.extend({
+  id: z.string().nonempty(),
 });
 
 //_______USER________________________________________________________________

@@ -10,6 +10,7 @@ import {
   paymentMethodSchema,
   paymentResultSchema,
   shippingAddressSchema,
+  updateProductSchema,
 } from "@/lib/validators";
 
 export enum E_AppThemes {
@@ -18,11 +19,13 @@ export enum E_AppThemes {
   DARK = "dark",
 }
 
-export type T_Product = z.infer<typeof insertProductsSchema> & {
+export type T_AddProduct = z.infer<typeof insertProductsSchema>;
+export type T_Product = T_AddProduct & {
   id: string;
   rating: string;
   createdAt: Date;
 };
+export type T_UpdProduct = z.infer<typeof updateProductSchema>;
 
 export type T_CartItem = z.infer<typeof cartItemSchema>;
 

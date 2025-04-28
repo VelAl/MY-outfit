@@ -1,10 +1,12 @@
 "use server";
 import { revalidatePath } from "next/cache";
 
+import { T_AddProduct, T_UpdProduct } from "@/app-types-ts";
 import { prisma } from "@/db/prisma";
 
 import { LATEST_PRODS_LIMIT, PAGE_SIZE } from "../constants";
 import { createErrMsg, createSuccessMsg, formatErorr } from "../utils";
+import { insertProductsSchema, updateProductSchema } from "../validators";
 
 // GET LATEST PRODUCTS
 export async function getLatestProducts() {
@@ -49,7 +51,7 @@ export async function getAllProducts({ limit = PAGE_SIZE, page }: T_Prop) {
   };
 }
 
-// delete a product
+// DELETE PRODUCT
 export const deleteProduct = async (id: string) => {
   try {
     await prisma.product.delete({
@@ -59,6 +61,39 @@ export const deleteProduct = async (id: string) => {
     revalidatePath("/admin/products");
 
     return createSuccessMsg("The Product has been deleted successfully.");
+  } catch (error) {
+    return createErrMsg(formatErorr(error));
+  }
+};
+
+// CREATE PRODUCT
+export const createProduct = async (data: T_AddProduct) => {
+  try {
+    const product = insertProductsSchema.parse(data);
+    await prisma.product.create({
+      data: product,
+    });
+
+    revalidatePath("/admin/products");
+
+    return createSuccessMsg("New Product has been added successfully.");
+  } catch (error) {
+    return createErrMsg(formatErorr(error));
+  }
+};
+
+// UPDATE PRODUCT
+export const updataProduct = async (data: T_UpdProduct) => {
+  try {
+    const product = updateProductSchema.parse(data);
+    await prisma.product.update({
+      where: { id: product.id },
+      data: product,
+    });
+
+    revalidatePath("/admin/products");
+
+    return createSuccessMsg("The Product has been updated successfully.");
   } catch (error) {
     return createErrMsg(formatErorr(error));
   }
