@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Plus } from "lucide-react";
 
 import AppTable from "@/components/shared/appTable";
 import Pagination from "@/components/shared/pagination";
@@ -30,7 +31,9 @@ const AdminProductsPage = async ({ searchParams }: T_Props) => {
         <h1 className="h2-bold">Products({total})</h1>
 
         <Button asChild>
-          <Link href="/admin/product/crate">Add New Product</Link>
+          <Link href="/admin/product/crate">
+            <Plus /> Add New
+          </Link>
         </Button>
       </div>
 

@@ -2,6 +2,8 @@ import Link from "next/link";
 import { Pencil } from "lucide-react";
 
 import { T_Columns, T_Product } from "@/app-types-ts";
+import DeleteDialog from "@/components/shared/delete-dialog";
+import { deleteProduct } from "@/lib/actions/product.actions";
 import { formatId, formatUSDPrice } from "@/lib/utils";
 
 export const columns: T_Columns<T_Product> = [
@@ -19,11 +21,15 @@ export const columns: T_Columns<T_Product> = [
   {
     title: "",
     classNameHeader: "sticky right-0 bg-background z-10",
-    classNameCell: "sticky right-0 bg-background z-10 flex justify-end pr-4",
+    classNameCell:
+      "sticky right-0 bg-background z-10 flex gap-2 justify-end pr-4 ",
     getCell: ({ id }) => (
-      <Link href={`/admin/products/${id}`}>
-        <Pencil className="w-5 text-primary transition-transform duration-200 hover:scale-120" />
-      </Link>
+      <>
+        <Link href={`/admin/products/${id}`}>
+          <Pencil className="w-5 text-primary transition-transform duration-200 hover:scale-120" />
+        </Link>
+        <DeleteDialog action={deleteProduct} id={id} />
+      </>
     ),
   },
 ];

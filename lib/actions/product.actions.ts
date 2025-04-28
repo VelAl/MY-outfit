@@ -1,7 +1,10 @@
 "use server";
+import { revalidatePath } from "next/cache";
+
 import { prisma } from "@/db/prisma";
 
 import { LATEST_PRODS_LIMIT, PAGE_SIZE } from "../constants";
+import { createErrMsg, createSuccessMsg, formatErorr } from "../utils";
 
 // GET LATEST PRODUCTS
 export async function getLatestProducts() {
@@ -45,3 +48,18 @@ export async function getAllProducts({ limit = PAGE_SIZE, page }: T_Prop) {
     totalPages: Math.ceil(total / limit),
   };
 }
+
+// delete a product
+export const deleteProduct = async (id: string) => {
+  try {
+    await prisma.product.delete({
+      where: { id },
+    });
+
+    revalidatePath("/admin/products");
+
+    return createSuccessMsg("The Product has been deleted successfully.");
+  } catch (error) {
+    return createErrMsg(formatErorr(error));
+  }
+};

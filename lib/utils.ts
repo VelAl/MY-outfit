@@ -26,12 +26,18 @@ export const formatErorr = (err: unknown) => {
     );
 
     return "ZodError: " + errors.join(". ");
-  } else if (
-    err instanceof Prisma.PrismaClientKnownRequestError &&
-    err.code === "P2002"
-  ) {
-    const field = (err.meta?.target as string[])?.[0] || "Field";
-    return `${field} is already in use`;
+  } else if (err instanceof Prisma.PrismaClientKnownRequestError) {
+    switch (err.code) { // email 
+      case "P2002":
+        const field = (err.meta?.target as string[])?.[0] || "Field";
+        return `${field} is already in use`;
+      case "P2025":
+        return "Searched product to delete does not exist.";
+      default:
+        return `Prisma error: ${err.code}. ${
+          err.message || "Something went wrong..."
+        }`;
+    }
   } else if (err instanceof Error) {
     return err.message;
   } else {

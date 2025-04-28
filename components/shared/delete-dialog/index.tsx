@@ -43,7 +43,7 @@ const DeleteDialog = ({ id, action }: T_Props) => {
   return (
     <AlertDialog open={open} onOpenChange={setopen}>
       <AlertDialogTrigger asChild>
-        <Trash2 className="transition-transform duration-200 hover:scale-120 cursor-pointer" />
+        <Trash2 className="text-primary transition-transform duration-200 hover:scale-120 cursor-pointer" />
       </AlertDialogTrigger>
 
       <AlertDialogContent>
