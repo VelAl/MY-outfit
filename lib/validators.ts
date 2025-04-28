@@ -20,7 +20,7 @@ export const insertProductsSchema = z.object({
     .string()
     .min(3, "Description has to be at least 3 characters")
     .max(30, "Max 30 characters"),
-  stock: z.coerce.number(),
+  stock: z.coerce.number().min(0),
   images: z
     .array(z.string())
     .min(1, "The product mast have at least one image"),

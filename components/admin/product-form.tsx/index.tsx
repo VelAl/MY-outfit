@@ -4,8 +4,9 @@ import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import slugify from "slugify";
+import { toast } from "sonner";
 
-import { T_AddProduct, T_Product } from "@/app-types-ts";
+import { T_AddProduct, T_Message, T_Product } from "@/app-types-ts";
 import AppFormInput from "@/components/shared/form-input";
 import Spinner from "@/components/shared/spinner";
 import { Button } from "@/components/ui/button";
@@ -18,6 +19,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
+import { createProduct, updataProduct } from "@/lib/actions/product.actions";
 import { insertProductsSchema } from "@/lib/validators";
 
 import { emptyProduct } from "./helpers";
@@ -34,9 +36,34 @@ export const NewProductForm = ({ type, product }: T_Props) => {
     defaultValues: product || emptyProduct,
   });
 
+  const _handleResponse = (res: T_Message) => {
+    if (res.success) {
+      toast.success(res.message);
+      router.push("/admin/products");
+    } else {
+      toast.error(res.message);
+    }
+  };
+  
+  const _handleCreate = async (values: T_AddProduct) => {
+    const res = await createProduct(values);
+    _handleResponse(res);
+  };
+
+  const _handleUpdate = async (values: T_AddProduct) => {
+    const res = await updataProduct({ ...(product as T_Product), ...values });
+    _handleResponse(res);
+  };
+
   return (
     <Form {...form}>
-      <form className="space-y-4">
+      <form
+        method="POST"
+        className="space-y-4"
+        onSubmit={form.handleSubmit(
+          type === "Create" ? _handleCreate : _handleUpdate
+        )}
+      >
         <div className="flex flex-col md:flex-row gap-5 items-start">
           {/* NAME */}
           <AppFormInput control={form.control} name="name" />
