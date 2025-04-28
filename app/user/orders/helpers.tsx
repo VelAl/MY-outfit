@@ -1,8 +1,5 @@
-import { ReactNode } from "react";
-import Link from "next/link";
-import { Eye } from "lucide-react";
-
-import { T_Order } from "@/app-types-ts";
+import { T_Columns, T_Order } from "@/app-types-ts";
+import { ViewItemLink } from "@/components/shared/view-item-link";
 import { formatDateTime, formatId, formatUSDPrice } from "@/lib/utils";
 
 type T_OrderFromDB = Pick<
@@ -10,10 +7,7 @@ type T_OrderFromDB = Pick<
   "id" | "createdAt" | "totalPrice" | "paidAt" | "deliveredAt"
 >;
 
-export const tableRows: {
-  title: string;
-  getCell: (order: T_OrderFromDB) => ReactNode;
-}[] = [
+export const tableRows: T_Columns<T_OrderFromDB> = [
   {
     title: "ID",
     getCell: ({ id }) => formatId(id),
@@ -38,11 +32,9 @@ export const tableRows: {
   {
     title: "",
     getCell: ({ id }) => (
-      <Link href={`/order/${id}`} className="">
-        <div className="flex justify-end text-primary">
-          <Eye className="transition-transform duration-200 hover:scale-110" />
-        </div>
-      </Link>
+      <div className="flex justify-end">
+        <ViewItemLink href={`/order/${id}`} />
+      </div>
     ),
   },
 ];

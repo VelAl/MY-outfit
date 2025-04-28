@@ -1,17 +1,13 @@
 import { ReactNode } from "react";
-import Link from "next/link";
-import {
-  BadgeDollarSign,
-  Barcode,
-  CreditCardIcon,
-  Eye,
-  Users,
-} from "lucide-react";
+import { BadgeDollarSign, Barcode, CreditCardIcon, Users } from "lucide-react";
 
+import { T_Columns } from "@/app-types-ts";
+import { ViewItemLink } from "@/components/shared/view-item-link";
 import { getOrdersSummary } from "@/lib/actions/order.actions";
 import { formatDateTime, formatNumber, formatUSDPrice } from "@/lib/utils";
 
 type T_GetOrdersSummary_Res = Awaited<ReturnType<typeof getOrdersSummary>>;
+type T_Order = T_GetOrdersSummary_Res["latestSales"][number];
 
 export const statisticsStructure: {
   title: string;
@@ -40,10 +36,7 @@ export const statisticsStructure: {
   },
 ];
 
-export const tableStructure: {
-  title: string;
-  getCell: (order: T_GetOrdersSummary_Res["latestSales"][number]) => ReactNode;
-}[] = [
+export const tableStructure: T_Columns<T_Order> = [
   {
     title: "BUYER",
     getCell: ({ user }) => user?.name || "Deleted User",
@@ -59,13 +52,8 @@ export const tableStructure: {
   {
     title: "",
     getCell: ({ id }) => (
-      <div className="flex justify-end text-primary">
-        <Link
-          href={`/order/${id}`}
-          className="transition-transform duration-200 hover:scale-[1.2]"
-        >
-          <Eye />
-        </Link>
+      <div className="flex justify-end">
+        <ViewItemLink href={`/order/${id}`} />
       </div>
     ),
   },

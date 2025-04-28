@@ -1,8 +1,7 @@
-import { ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-import { T_Cart } from "@/app-types-ts";
+import { T_Cart, T_Columns } from "@/app-types-ts";
 import { formatUSDPrice } from "@/lib/utils";
 
 import AppTable from "../appTable";
@@ -11,10 +10,9 @@ type T_Props = {
   items: T_Cart["items"];
 };
 
-const columns: {
-  title: string;
-  getCell: (product: T_Cart["items"][number]) => ReactNode;
-}[] = [
+type T_CartItem = T_Cart["items"][number];
+
+const columns: T_Columns<T_CartItem> = [
   {
     title: "Item",
     getCell: (product) => (

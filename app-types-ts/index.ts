@@ -1,3 +1,4 @@
+import { ReactNode } from "react";
 import { z } from "zod";
 
 import {
@@ -57,3 +58,10 @@ export type T_Order = T_InsertOrder & {
   orderItems: T_InsertOrderItem[];
   user: { name: string; email: string };
 };
+
+export type T_Columns<T> = {
+  title: string;
+  getCell: (entity: T) => ReactNode;
+  classNameHeader?: string;
+  classNameCell?: string;
+}[];

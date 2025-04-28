@@ -1,5 +1,4 @@
-import { ReactNode } from "react";
-
+import { T_Columns } from "@/app-types-ts";
 import {
   Table,
   TableBody,
@@ -10,11 +9,7 @@ import {
 } from "@/components/ui/table";
 
 type T_Props<T> = {
-  columns: {
-    title: string;
-    getCell: (entity: T) => ReactNode;
-  }[];
-
+  columns: T_Columns<T>;
   entities: T[];
   keyName?: keyof T;
 };
@@ -28,8 +23,10 @@ function AppTable<T extends Record<string, unknown>>({
     <Table>
       <TableHeader>
         <TableRow>
-          {columns.map(({ title }) => (
-            <TableHead key={title}>{title}</TableHead>
+          {columns.map(({ title, classNameHeader }) => (
+            <TableHead className={classNameHeader} key={title}>
+              {title}
+            </TableHead>
           ))}
         </TableRow>
       </TableHeader>
@@ -37,8 +34,10 @@ function AppTable<T extends Record<string, unknown>>({
       <TableBody>
         {entities.map((entity) => (
           <TableRow key={`${entity[keyName]}`}>
-            {columns.map(({ getCell, title }) => (
-              <TableCell key={title}>{getCell(entity)}</TableCell>
+            {columns.map(({ getCell, title, classNameCell }) => (
+              <TableCell className={classNameCell} key={title}>
+                {getCell(entity)}
+              </TableCell>
             ))}
           </TableRow>
         ))}
