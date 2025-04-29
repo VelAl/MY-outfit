@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 
 import AppTable from "@/components/shared/appTable";
+import Pagination from "@/components/shared/pagination";
 import { getAllUsers } from "@/lib/actions/user.actions";
 
 import { columns } from "./helpers";
@@ -21,7 +22,11 @@ const AdminUsersPage = async ({ searchParams }: T_Props) => {
 
   return (
     <div>
+      <h2 className="h2-bold">Users({total})</h2>
       <AppTable entities={data} columns={columns} />
+      <div className="mt-4 flex justify-center">
+        <Pagination page={page || 1} totalPages={totalPages} />
+      </div>
     </div>
   );
 };

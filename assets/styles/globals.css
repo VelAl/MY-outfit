@@ -108,7 +108,7 @@
   --sidebar-border: oklch(0.92 0.004 286.32);
   --sidebar-ring: oklch(0.623 0.214 259.815);
   --success: oklch(0.7 0.18 142);
-  --success-foreground: oklch(0.1 0.02 142);
+  --success-foreground: oklch(0.95 0.05 142);
 }
 
 .dark {
