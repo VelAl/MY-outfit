@@ -12,6 +12,7 @@ import AppFormInput from "@/components/shared/form-input";
 import Spinner from "@/components/shared/spinner";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Form,
   FormControl,
@@ -39,7 +40,7 @@ export const NewProductForm = ({ type, product }: T_Props) => {
     defaultValues: product || emptyProduct,
   });
 
-  const images = form.watch("images");
+  const { banner, images, isFeatured } = form.watch();
 
   const _handleResponse = (res: T_Message) => {
     if (res.success) {
@@ -69,11 +70,10 @@ export const NewProductForm = ({ type, product }: T_Props) => {
           type === "Create" ? _handleCreate : _handleUpdate
         )}
       >
+        {/* NAME & SLUG */}
         <div className="flex flex-col md:flex-row gap-5 items-start">
-          {/* NAME */}
           <AppFormInput control={form.control} name="name" />
 
-          {/* SLUG */}
           <div className="w-full flex items-end">
             <Button
               type="button"
@@ -95,19 +95,16 @@ export const NewProductForm = ({ type, product }: T_Props) => {
           </div>
         </div>
 
+        {/* CATEGORY & BRAND*/}
         <div className="flex flex-col md:flex-row gap-5">
-          {/* CATEGORY */}
           <AppFormInput control={form.control} name="category" />
-
-          {/* BRAND */}
           <AppFormInput control={form.control} name="brand" />
         </div>
 
+        {/* PRICE & STOCK */}
         <div className="flex flex-col md:flex-row gap-5">
-          {/* PRICE */}
           <AppFormInput control={form.control} name="price" />
 
-          {/* STOCK */}
           <AppFormInput
             control={form.control}
             name="stock"
@@ -116,9 +113,8 @@ export const NewProductForm = ({ type, product }: T_Props) => {
           />
         </div>
 
+        {/* IMAGES */}
         <div className="upload-field flex flex-col md:flex-row gap-5">
-          {/* IMAGES */}
-
           <FormField
             control={form.control}
             name={"images"}
@@ -164,11 +160,60 @@ export const NewProductForm = ({ type, product }: T_Props) => {
           />
         </div>
 
-        <div className="upload-field">{/* IS FEATURED */}</div>
+        {/* IS FEATURED */}
+        <div className="upload-field">
+          Featured Product
+          <Card className="rounded-sm min-h-24 relative pb-12">
+            <CardContent>
+              <FormField
+                name="isFeatured"
+                control={form.control}
+                render={({ field }) => (
+                  <FormItem className="flex absolute right-4 bottom-4">
+                    <FormControl>
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={() => {
+                          form.setValue("isFeatured", !isFeatured);
+                          if (banner) form.setValue("banner", null);
+                        }}
+                      />
+                    </FormControl>
+                    <FormLabel>Is Featured</FormLabel>
+                  </FormItem>
+                )}
+              />
+              {isFeatured && banner && (
+                <Image
+                  src={banner}
+                  alt="banner"
+                  className="w-full object-cover object-center rounded-sm"
+                  width={1920}
+                  height={300}
+                />
+              )}
 
+              {isFeatured && !banner && (
+                <UploadButton
+                  className="absolute bottom-4 right-36 bg-secondary rounded-sm  px-2 pb-2"
+                  endpoint="imageUploader"
+                  onClientUploadComplete={([{ url }]: {
+                    url: string;
+                  }[]) => {
+                    form.setValue("banner", url);
+                    form.trigger("banner");
+                  }}
+                  onUploadError={(err) => {
+                    toast.error(err.message);
+                  }}
+                />
+              )}
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* DESCRIPTION */}
         <div>
-          {/* DESCRIPTION */}
-
           <FormField
             control={form.control}
             name={"description"}
@@ -189,6 +234,7 @@ export const NewProductForm = ({ type, product }: T_Props) => {
           />
         </div>
 
+        {/* SUBMIT BUTTON */}
         <div className="text-end">
           <Button
             type="submit"
