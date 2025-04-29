@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 
 import { auth } from "@/auth";
 import { getOrderById } from "@/lib/actions/order.actions";
+import { userRoles } from "@/lib/constants";
 
 import OrderDetailsTable from "./order-details-table";
 
@@ -26,7 +27,7 @@ export const OrderDetailPage = async ({ params }: T_Props) => {
     <div>
       <OrderDetailsTable
         order={order}
-        isAdmin={session?.user.role === "admin"}
+        isAdmin={session?.user.role === userRoles.ADMIN}
         paypalClientId={process.env.PAYPAL_CLIENT_ID || "sb"}
       />
     </div>

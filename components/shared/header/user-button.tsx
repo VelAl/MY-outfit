@@ -11,6 +11,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { signOutUser } from "@/lib/actions/user.actions";
+import { userRoles } from "@/lib/constants";
 
 const UserButton = async () => {
   const session = (await auth()) as Session; // component won`t be rendered if !session
@@ -54,7 +55,7 @@ const UserButton = async () => {
           </DropdownMenuItem>
 
           {/* ADMIN ROUTES */}
-          {session?.user?.role === "admin" && (
+          {session?.user?.role === userRoles.ADMIN && (
             <DropdownMenuItem className="p-0">
               <Link
                 href={"/admin/overview"}

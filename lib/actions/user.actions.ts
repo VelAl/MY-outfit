@@ -3,10 +3,16 @@
 import { isRedirectError } from "next/dist/client/components/redirect-error";
 import { hashSync } from "bcrypt-ts-edge";
 
-import { T_Message, T_PaymentMethod, T_ShippingAddress } from "@/app-types-ts";
+import {
+  T_Message,
+  T_PaymentMethod,
+  T_ShippingAddress,
+  T_User,
+} from "@/app-types-ts";
 import { auth, signIn, signOut } from "@/auth";
 import { prisma } from "@/db/prisma";
 
+import { PAGE_SIZE } from "../constants";
 import { createErrMsg, createSuccessMsg, formatErorr } from "../utils";
 import {
   paymentMethodSchema,
@@ -86,7 +92,8 @@ export const getUserById = async (id: string) => {
 
   if (!user) throw new Error("User not found");
 
-  return user;
+  const { password, ...safeUser } = user;
+  return safeUser;
 };
 
 // upd the user`s address
@@ -159,4 +166,28 @@ export const updUserProfile = async (data: T_UpdUserProfileProp) => {
   } catch (error) {
     return createErrMsg(formatErorr(error));
   }
+};
+
+// get all the users
+type T_GetAllUsers_Props = {
+  page?: number;
+  limit?: number;
+};
+export const getAllUsers = async ({
+  page = 1,
+  limit = PAGE_SIZE,
+}: T_GetAllUsers_Props) => {
+  const data = await prisma.user.findMany({
+    orderBy: { createdAt: "desc" },
+    skip: (page - 1) * limit,
+    take: limit,
+  });
+
+  const total = await prisma.user.count();
+
+  return {
+    data: data.map(({ password, ...user }) => user as T_User),
+    total,
+    totalPages: Math.ceil(total / limit),
+  };
 };

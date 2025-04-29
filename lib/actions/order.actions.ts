@@ -13,7 +13,7 @@ import {
 import { auth } from "@/auth";
 import { prisma } from "@/db/prisma";
 
-import { PAGE_SIZE } from "../constants";
+import { PAGE_SIZE, userRoles } from "../constants";
 import { paypal } from "../paypal";
 import {
   convertToPlainObject,
@@ -345,7 +345,7 @@ export const getAllOrders = async ({
 export const deleteOrder = async (id: string) => {
   try {
     const session = await auth();
-    if (session?.user.role !== "admin") {
+    if (session?.user.role !== userRoles.ADMIN) {
       throw new Error("User is not authorized.");
     }
 
@@ -365,7 +365,7 @@ export const deleteOrder = async (id: string) => {
 export const updateOrderToPaidCOD = async (orderId: string) => {
   try {
     const session = await auth();
-    if (session?.user.role !== "admin") {
+    if (session?.user.role !== userRoles.ADMIN) {
       throw new Error("User is not authorized.");
     }
     

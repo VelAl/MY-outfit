@@ -5,6 +5,7 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import { compareSync } from "bcrypt-ts-edge";
 
 import { prisma } from "./db/prisma";
+import { T_UserRole } from "./app-types-ts";
 
 export const config = {
   adapter: PrismaAdapter(prisma),
@@ -50,7 +51,7 @@ export const config = {
     async session({ session, user, trigger, token }) {
       // Set the user ID from the token
       session.user.id = token.sub as string;
-      session.user.role = token.role as string;
+      session.user.role = token.role as T_UserRole;
       session.user.name = token.name;
 
       // if the an upd? set the user name
@@ -64,7 +65,7 @@ export const config = {
     async jwt({ token, user, trigger, session }) {
       if (user) {
         token.id = user.id;
-        token.role = user.role;
+        token.role = user.role as T_UserRole;
 
         if (user.name === "NO_NAME") {
           token.name = user.email!.split("@")[0];

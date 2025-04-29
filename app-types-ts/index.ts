@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 import { z } from "zod";
 
+import { userRoles } from "@/lib/constants";
 import {
   cartItemSchema,
   insertCartSchema,
@@ -69,3 +70,18 @@ export type T_Columns<T> = {
   classNameHeader?: string;
   classNameCell?: string;
 }[];
+
+export type T_UserRole = (typeof userRoles)[keyof typeof userRoles];
+
+export type T_User = {
+  id: string;
+  name: string;
+  email: string;
+  emailVerified: Date | null;
+  image: string | null;
+  role: T_UserRole;
+  address: T_ShippingAddress | null;
+  paymentMethod: string | null;
+  createdAt: Date;
+  updatedAt: Date | null;
+};

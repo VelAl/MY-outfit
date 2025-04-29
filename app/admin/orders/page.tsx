@@ -4,7 +4,7 @@ import { auth } from "@/auth";
 import AppTable from "@/components/shared/appTable";
 import Pagination from "@/components/shared/pagination";
 import { getAllOrders } from "@/lib/actions/order.actions";
-import { PAGE_SIZE } from "@/lib/constants";
+import { PAGE_SIZE, userRoles } from "@/lib/constants";
 
 import { tableRows } from "./helpers";
 
@@ -19,7 +19,7 @@ type T_Props = {
 const AllOrdersPage = async ({ searchParams }: T_Props) => {
   const session = await auth();
 
-  if (session?.user?.role !== "admin") {
+  if (session?.user?.role !== userRoles.ADMIN) {
     throw new Error("User is not authorized.");
   }
 

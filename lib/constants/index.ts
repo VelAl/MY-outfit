@@ -13,6 +13,12 @@ export const appThemes: E_AppThemes[] = [
   E_AppThemes.DARK,
 ];
 
+export const userRoles = {
+  USER: "user",
+  ADMIN: "admin",
+} as const;
+
+
 export const LATEST_PRODS_LIMIT = Number(process.env.LATEST_PRODS_LIMIT || 4);
 
 // Array of regex protected paths patterns

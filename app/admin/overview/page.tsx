@@ -4,6 +4,7 @@ import { auth } from "@/auth";
 import AppTable from "@/components/shared/appTable";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getOrdersSummary } from "@/lib/actions/order.actions";
+import { userRoles } from "@/lib/constants";
 
 import Charts from "./charts";
 import { statisticsStructure, tableStructure } from "./helpers";
@@ -15,7 +16,7 @@ export const metadata: Metadata = {
 const OverviewPage = async () => {
   const session = await auth();
 
-  if (session?.user?.role !== "admin") {
+  if (session?.user?.role !== userRoles.ADMIN) {
     throw new Error("Incorrect user`s role to access Dashboard page.");
   }
 
