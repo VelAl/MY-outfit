@@ -21,12 +21,17 @@ import Spinner from "../spinner";
 
 type T_Props = {
   id: string;
+  disabled?: boolean;
   action: (id: string) => Promise<T_Message>;
 };
 
-const DeleteDialog = ({ id, action }: T_Props) => {
+const DeleteDialog = ({ id, action, disabled }: T_Props) => {
   const [open, setopen] = useState(false);
   const [isPending, startTransition] = useTransition();
+
+  if (disabled) {
+    return <Trash2 className="text-gray-300" />;
+  }
 
   const _handleDelete = () =>
     startTransition(async () => {

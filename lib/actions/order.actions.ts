@@ -13,7 +13,7 @@ import {
 import { auth } from "@/auth";
 import { prisma } from "@/db/prisma";
 
-import { PAGE_SIZE, userRoles } from "../constants";
+import { PAGE_SIZE } from "../constants";
 import { paypal } from "../paypal";
 import {
   convertToPlainObject,
@@ -24,6 +24,7 @@ import {
 import { insertOrderSchema } from "../validators";
 
 import { getMyCart } from "./cart.actions";
+import { isAdminCheck } from "./helpers";
 import { getUserById } from "./user.actions";
 
 // create order with items
@@ -344,14 +345,9 @@ export const getAllOrders = async ({
 // delete an order
 export const deleteOrder = async (id: string) => {
   try {
-    const session = await auth();
-    if (session?.user.role !== userRoles.ADMIN) {
-      throw new Error("User is not authorized.");
-    }
+    await isAdminCheck();
 
-    await prisma.order.delete({
-      where: { id },
-    });
+    await prisma.order.delete({ where: { id } });
 
     revalidatePath("/admin/orders");
 
@@ -364,11 +360,8 @@ export const deleteOrder = async (id: string) => {
 // update order to paid (cashe on delivery)
 export const updateOrderToPaidCOD = async (orderId: string) => {
   try {
-    const session = await auth();
-    if (session?.user.role !== userRoles.ADMIN) {
-      throw new Error("User is not authorized.");
-    }
-    
+    await isAdminCheck();
+
     await updateOrderToPaid({ orderId });
 
     revalidatePath(`/order/${orderId}`);

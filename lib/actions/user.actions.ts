@@ -1,5 +1,6 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { isRedirectError } from "next/dist/client/components/redirect-error";
 import { hashSync } from "bcrypt-ts-edge";
 
@@ -20,6 +21,8 @@ import {
   signInFormSchema,
   signUpFormSchema,
 } from "../validators";
+
+import { isAdminCheck } from "./helpers";
 
 // Sign in the user with credentials
 export const signInWithCreds = async (
@@ -181,13 +184,60 @@ export const getAllUsers = async ({
     orderBy: { createdAt: "desc" },
     skip: (page - 1) * limit,
     take: limit,
+    include: {
+      _count: {
+        select: {
+          Order: {
+            where: { isPaid: false },
+          },
+        },
+      },
+    },
   });
-
   const total = await prisma.user.count();
 
   return {
-    data: data.map(({ password, ...user }) => user as T_User),
+    data: data.map(({ password, _count, ...user }) => ({
+      ...user,
+      address: user.address as T_ShippingAddress | null,
+      unpaidOrdersCount: _count.Order,
+    })),
     total,
     totalPages: Math.ceil(total / limit),
   };
+};
+
+// DELETE USER
+export const deleteUser = async (id: string) => {
+  try {
+    await isAdminCheck();
+    const user = await prisma.user.findFirst({
+      where: { id },
+      include: {
+        _count: {
+          select: {
+            Order: {
+              where: { isPaid: false },
+            },
+          },
+        },
+      },
+    });
+    if (!user) {
+      throw new Error(`There is no User to delete with ID ${id}`);
+    }
+
+    if (user._count.Order) {
+      const message = `Forbidden! User has ${user?._count.Order} unpaid orders.`;
+      throw new Error(message);
+    }
+
+    await prisma.user.delete({ where: { id } });
+
+    revalidatePath('/admin/users')
+
+    return createSuccessMsg("User has been deleted.");
+  } catch (error) {
+    return createErrMsg(formatErorr(error));
+  }
 };
