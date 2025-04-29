@@ -5,7 +5,12 @@ import { T_AddProduct, T_UpdProduct } from "@/app-types-ts";
 import { prisma } from "@/db/prisma";
 
 import { LATEST_PRODS_LIMIT, PAGE_SIZE } from "../constants";
-import { createErrMsg, createSuccessMsg, formatErorr } from "../utils";
+import {
+  convertToPlainObject,
+  createErrMsg,
+  createSuccessMsg,
+  formatErorr,
+} from "../utils";
 import { insertProductsSchema, updateProductSchema } from "../validators";
 
 // GET LATEST PRODUCTS
@@ -25,6 +30,15 @@ export async function getProductBySlug(slug: string) {
   });
 
   return product;
+}
+
+// GET SINGLE PRODUCT by ID
+export async function getProductByID(id: string) {
+  const product = await prisma.product.findFirst({
+    where: { id },
+  });
+
+  return convertToPlainObject(product);
 }
 
 // GET ALL PRODUCTS
@@ -83,7 +97,7 @@ export const createProduct = async (data: T_AddProduct) => {
 };
 
 // UPDATE PRODUCT
-export const updataProduct = async (data: T_UpdProduct) => {
+export const updateProduct = async (data: T_UpdProduct) => {
   try {
     const product = updateProductSchema.parse(data);
     await prisma.product.update({

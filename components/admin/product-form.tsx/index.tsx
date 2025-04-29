@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { CircleX } from "lucide-react";
 import slugify from "slugify";
 import { toast } from "sonner";
 
@@ -22,7 +23,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
-import { createProduct, updataProduct } from "@/lib/actions/product.actions";
+import { createProduct, updateProduct } from "@/lib/actions/product.actions";
 import { UploadButton } from "@/lib/uploadthing";
 import { insertProductsSchema } from "@/lib/validators";
 
@@ -57,7 +58,7 @@ export const NewProductForm = ({ type, product }: T_Props) => {
   };
 
   const _handleUpdate = async (values: T_AddProduct) => {
-    const res = await updataProduct({ ...(product as T_Product), ...values });
+    const res = await updateProduct({ ...(product as T_Product), ...values });
     _handleResponse(res);
   };
 
@@ -121,18 +122,32 @@ export const NewProductForm = ({ type, product }: T_Props) => {
             render={() => (
               <FormItem className="w-full">
                 <FormLabel>Images</FormLabel>
-                <Card className="rounded-sm p-0">
+                <Card className="rounded-sm p-2">
                   <CardContent className="space-y-2 mt-2 min-h-28 relative">
-                    <div className="flex-start space-x-2">
+                    <div className="flex-start space-x-4">
                       {images.map((image) => (
-                        <Image
-                          className="w-20 h-20 object-cover object-center rounded-sm"
-                          alt="product img"
-                          key={image}
-                          src={image}
-                          width={100}
-                          height={100}
-                        />
+                        <div key={image} className="relative">
+                          <Image
+                            className="w-20 h-20 object-cover object-center rounded-sm"
+                            alt="product img"
+                            src={image}
+                            width={100}
+                            height={100}
+                          />
+
+                          <CircleX
+                            onClick={() => {
+                              form.setValue(
+                                "images",
+                                images.filter((img) => img !== image)
+                              );
+                              form.trigger("images");
+                            }}
+                            className="text-primary bg-muted rounded-full absolute -top-2 -right-2 cursor-pointer 
+                            transition-transform duration-200 hover:scale-120
+                          "
+                          />
+                        </div>
                       ))}
 
                       <FormControl className="absolute right-4 bottom-2">
@@ -238,7 +253,7 @@ export const NewProductForm = ({ type, product }: T_Props) => {
         <div className="text-end">
           <Button
             type="submit"
-            disabled={!form.formState.isDirty || form.formState.isSubmitting}
+            disabled={form.formState.isSubmitting}
           >
             {form.formState.isSubmitting && <Spinner />}
             {form.formState.isSubmitting
