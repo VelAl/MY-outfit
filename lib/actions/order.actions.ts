@@ -344,6 +344,11 @@ export const getAllOrders = async ({
 // delete an order
 export const deleteOrder = async (id: string) => {
   try {
+    const session = await auth();
+    if (session?.user.role !== "admin") {
+      throw new Error("User is not authorized.");
+    }
+
     await prisma.order.delete({
       where: { id },
     });
@@ -359,6 +364,11 @@ export const deleteOrder = async (id: string) => {
 // update order to paid (cashe on delivery)
 export const updateOrderToPaidCOD = async (orderId: string) => {
   try {
+    const session = await auth();
+    if (session?.user.role !== "admin") {
+      throw new Error("User is not authorized.");
+    }
+    
     await updateOrderToPaid({ orderId });
 
     revalidatePath(`/order/${orderId}`);
