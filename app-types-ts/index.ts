@@ -24,6 +24,7 @@ export type T_Product = T_AddProduct & {
   id: string;
   rating: string;
   createdAt: Date;
+  numReviews: number;
 };
 export type T_UpdProduct = z.infer<typeof updateProductSchema>;
 
