@@ -44,13 +44,13 @@ export const createOrder = async (): Promise<
     if (!cart?.items.length) {
       return { ...createErrMsg("Your cart is empty"), redirectTo: "/cart" };
     }
-    if (!user.address) {
+    if (!user?.address) {
       return {
         ...createErrMsg("Users addres is empty"),
         redirectTo: "/shipping-address",
       };
     }
-    if (!user.paymentMethod) {
+    if (!user?.paymentMethod) {
       return {
         ...createErrMsg("No payment method"),
         redirectTo: "/payment-method",

@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { isRedirectError } from "next/dist/client/components/redirect-error";
+import { Prisma } from "@prisma/client";
 import { hashSync } from "bcrypt-ts-edge";
 
 import {
@@ -187,7 +188,7 @@ export const updUserProfileByAdmin = async (data: T_UdateUser) => {
       where: { id: data.id },
     });
 
-    revalidatePath('/admin/users')
+    revalidatePath("/admin/users");
 
     return createSuccessMsg("The User`s info has been updated successfully!");
   } catch (error) {
@@ -199,12 +200,27 @@ export const updUserProfileByAdmin = async (data: T_UdateUser) => {
 type T_GetAllUsers_Props = {
   page?: number;
   limit?: number;
+  query?: string;
 };
 export const getAllUsers = async ({
   page = 1,
   limit = PAGE_SIZE,
+  query,
 }: T_GetAllUsers_Props) => {
+  const queryFilter: Prisma.UserWhereInput =
+    query && query !== "all"
+      ? {
+          name: {
+            contains: query,
+            mode: "insensitive",
+          },
+        }
+      : {};
+
   const data = await prisma.user.findMany({
+    where: {
+      ...queryFilter,
+    },
     orderBy: { createdAt: "desc" },
     skip: (page - 1) * limit,
     take: limit,
@@ -218,7 +234,7 @@ export const getAllUsers = async ({
       },
     },
   });
-  const total = await prisma.user.count();
+  const total = await prisma.user.count({ where: { ...queryFilter } });
 
   return {
     data: data.map(({ password, _count, ...user }) => ({
