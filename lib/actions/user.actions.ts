@@ -96,8 +96,8 @@ export const getUserById = async (id: string) => {
 
     if (!user) throw new Error("User not found");
 
-    const { password, ...safeUser } = user;
-    return safeUser;
+    const { password, address, ...safeUser } = user;
+    return { ...safeUser, address: address as T_User["address"] };
   } catch (err) {
     console.error(formatErorr(err));
     return null;

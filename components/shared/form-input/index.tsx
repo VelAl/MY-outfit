@@ -39,7 +39,7 @@ function AppFormInput<T extends T_FormValuesShape>({
       control={control}
       name={name}
       render={({ field }: { field: ControllerRenderProps<T, Path<T>> }) => (
-        <FormItem className="w-full">
+        <FormItem className="w-full gap-1">
           <FormLabel className={cx("capitalize ml-2", labelClassname)}>
             {labelName || name}
           </FormLabel>
