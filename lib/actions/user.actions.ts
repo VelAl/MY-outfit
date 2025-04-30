@@ -89,14 +89,19 @@ export const signUpUser = async (
 
 // get user by ID
 export const getUserById = async (id: string) => {
-  const user = await prisma.user.findFirst({
-    where: { id },
-  });
+  try {
+    const user = await prisma.user.findFirst({
+      where: { id },
+    });
 
-  if (!user) throw new Error("User not found");
+    if (!user) throw new Error("User not found");
 
-  const { password, ...safeUser } = user;
-  return safeUser;
+    const { password, ...safeUser } = user;
+    return safeUser;
+  } catch (err) {
+    console.error(formatErorr(err));
+    return null;
+  }
 };
 
 // upd the user`s address
@@ -234,7 +239,7 @@ export const deleteUser = async (id: string) => {
 
     await prisma.user.delete({ where: { id } });
 
-    revalidatePath('/admin/users')
+    revalidatePath("/admin/users");
 
     return createSuccessMsg("User has been deleted.");
   } catch (error) {

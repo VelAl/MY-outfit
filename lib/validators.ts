@@ -1,6 +1,8 @@
 import { z } from "zod";
 
-import { PAYMENT_METHODS } from "./constants";
+import { T_UserRole } from "@/app-types-ts";
+
+import { PAYMENT_METHODS, userRoles } from "./constants";
 import { fomatNumWithDecimals } from "./utils";
 
 const price = z
@@ -56,6 +58,12 @@ export const signUpFormSchema = z
 export const updUserProfileSchema = z.object({
   name: z.string().min(3, "Name must be at least 3 characters"),
   email: z.string().email("Ivalid email"),
+});
+
+// update user by Admin on user details page
+export const updateUserSchema = updUserProfileSchema.extend({
+  id: z.string().nonempty(),
+  role: z.enum(Object.values(userRoles) as [T_UserRole, ...T_UserRole[]]),
 });
 
 //_______CART________________________________________________________________
