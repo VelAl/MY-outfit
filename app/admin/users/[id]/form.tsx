@@ -1,10 +1,12 @@
 "use client";
 
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Pencil, PencilOff } from "lucide-react";
-import { z } from "zod";
+import { toast } from "sonner";
 
+import { T_UdateUser } from "@/app-types-ts";
 import AppFormInput from "@/components/shared/form-input";
 import Spinner from "@/components/shared/spinner";
 import { Button } from "@/components/ui/button";
@@ -23,22 +25,30 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { updUserProfileByAdmin } from "@/lib/actions/user.actions";
 import { userRoles } from "@/lib/constants";
 import { updateUserSchema } from "@/lib/validators";
 
-type T_FormValues = z.infer<typeof updateUserSchema>;
-type T_Props = { user: T_FormValues };
+type T_Props = { user: T_UdateUser };
 
 const rolesArray = Object.values(userRoles);
 
 const EditUserAdminForm = ({ user }: T_Props) => {
-  const form = useForm<T_FormValues>({
+  const router = useRouter();
+
+  const form = useForm<T_UdateUser>({
     resolver: zodResolver(updateUserSchema),
     defaultValues: user,
   });
 
-  const _onSubmit = async (values: T_FormValues) => {
-    console.log("values ===>", values);
+  const _onSubmit = async (values: T_UdateUser) => {
+    const res = await updUserProfileByAdmin(values);
+    if (!res.success) {
+      toast.error(res.message);
+    } else {
+      toast.success(res.message);
+      router.push("/admin/users");
+    }
   };
 
   return (
@@ -56,8 +66,8 @@ const EditUserAdminForm = ({ user }: T_Props) => {
 
         {/* NAME */}
         <div className="flex items-end gap-4">
-          <AppFormInput control={form.control} name="name" disabled />
-          <PencilOff className="mb-2 text-gray-500" />
+          <AppFormInput control={form.control} name="name" />
+          <Pencil className="mb-2 text-primary" />
         </div>
 
         {/* ROLE */}

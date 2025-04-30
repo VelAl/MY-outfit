@@ -8,6 +8,7 @@ import {
   T_Message,
   T_PaymentMethod,
   T_ShippingAddress,
+  T_UdateUser,
   T_User,
 } from "@/app-types-ts";
 import { auth, signIn, signOut } from "@/auth";
@@ -22,7 +23,7 @@ import {
   signUpFormSchema,
 } from "../validators";
 
-import { isAdminCheck } from "./helpers";
+import { checkAuthentication, isAdminCheck } from "./helpers";
 
 // Sign in the user with credentials
 export const signInWithCreds = async (
@@ -171,6 +172,24 @@ export const updUserProfile = async (data: T_UpdUserProfileProp) => {
     });
 
     return createSuccessMsg("Profile has been updated successfully!");
+  } catch (error) {
+    return createErrMsg(formatErorr(error));
+  }
+};
+
+// update user`s info by Admin
+export const updUserProfileByAdmin = async (data: T_UdateUser) => {
+  try {
+    await isAdminCheck();
+
+    await prisma.user.update({
+      data: { name: data.name, role: data.role },
+      where: { id: data.id },
+    });
+
+    revalidatePath('/admin/users')
+
+    return createSuccessMsg("The User`s info has been updated successfully!");
   } catch (error) {
     return createErrMsg(formatErorr(error));
   }

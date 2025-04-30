@@ -12,6 +12,7 @@ import {
   paymentResultSchema,
   shippingAddressSchema,
   updateProductSchema,
+  updateUserSchema,
 } from "@/lib/validators";
 
 export enum E_AppThemes {
@@ -85,3 +86,4 @@ export type T_User = {
   createdAt: Date;
   updatedAt: Date | null;
 };
+export type T_UdateUser = z.infer<typeof updateUserSchema>;
