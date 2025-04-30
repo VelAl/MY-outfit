@@ -128,3 +128,13 @@ export const updateProduct = async (data: T_UpdProduct) => {
     return createErrMsg(formatErorr(error));
   }
 };
+
+// GET CATEGORIES
+export const getAllCategories = async () => {
+  const data = await prisma.product.groupBy({
+    by: "category",
+    _count: true,
+  });
+
+  return data
+};
