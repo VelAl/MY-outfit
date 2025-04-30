@@ -136,5 +136,16 @@ export const getAllCategories = async () => {
     _count: true,
   });
 
-  return data
+  return data;
+};
+
+// GET FEATURED PRODUCTS
+export const getFeaturedProducts = async (limit?: number) => {
+  const data = await prisma.product.findMany({
+    where: { isFeatured: true },
+    orderBy: { createdAt: "desc" },
+    take: limit || 5,
+  });
+
+  return convertToPlainObject(data);
 };

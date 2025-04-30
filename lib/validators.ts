@@ -13,7 +13,7 @@ const price = z
   );
 
 //_______PRODUCT_________________________________________________________
-export const insertProductsSchema = z.object({
+const baseProductSchema = z.object({
   name: z.string().min(3, "Name has to be at least 3 characters"),
   slug: z.string().min(3, "Slug has to be at least 3 characters"),
   category: z.string().min(3, "Category has to be at least 3 characters"),
@@ -25,15 +25,32 @@ export const insertProductsSchema = z.object({
   stock: z.coerce.number().min(0),
   images: z
     .array(z.string())
-    .min(1, "The product mast have at least one image"),
+    .min(1, "The product must have at least one image"),
   isFeatured: z.boolean(),
   banner: z.string().nullable(),
   price,
 });
 
-export const updateProductSchema = insertProductsSchema.extend({
-  id: z.string().nonempty(),
-});
+export const insertProductsSchema = baseProductSchema.refine(
+  ({ banner, isFeatured }) => !(isFeatured && !banner),
+  {
+    path: ["isFeatured"],
+    message: "If product is featured it must have banner!",
+  }
+);
+
+export const updateProductSchema = baseProductSchema
+  .extend({
+    id: z.string().nonempty(),
+  })
+  .refine(
+    // duplicate cos zod can not extend after refine
+    ({ banner, isFeatured }) => !(isFeatured && !banner),
+    {
+      path: ["isFeatured"],
+      message: "If product is featured it must have banner!",
+    }
+  );
 
 //_______USER________________________________________________________________
 export const signInFormSchema = z.object({

@@ -195,6 +195,7 @@ export const NewProductForm = ({ type, product }: T_Props) => {
                       />
                     </FormControl>
                     <FormLabel>Is Featured</FormLabel>
+                    <FormMessage className="flex absolute -right-4 -bottom-10 text-nowrap" />
                   </FormItem>
                 )}
               />
@@ -216,7 +217,7 @@ export const NewProductForm = ({ type, product }: T_Props) => {
                     url: string;
                   }[]) => {
                     form.setValue("banner", url);
-                    form.trigger("banner");
+                    form.trigger("isFeatured");
                   }}
                   onUploadError={(err) => {
                     toast.error(err.message);
@@ -251,10 +252,7 @@ export const NewProductForm = ({ type, product }: T_Props) => {
 
         {/* SUBMIT BUTTON */}
         <div className="text-end">
-          <Button
-            type="submit"
-            disabled={form.formState.isSubmitting}
-          >
+          <Button type="submit" disabled={form.formState.isSubmitting}>
             {form.formState.isSubmitting && <Spinner />}
             {form.formState.isSubmitting
               ? "Submitting..."
