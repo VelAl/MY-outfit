@@ -1,17 +1,15 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import { AdminSearch } from "@/components/admin";
 import Menu from "@/components/shared/header/menu";
-import { Input } from "@/components/ui/input";
 import { APP_NAME } from "@/lib/constants";
 
 import MainNav from "./main-nav";
 
 export default function UserLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <div className="flex flex-col">
       <div className="border-b container mx-auto">
@@ -29,13 +27,7 @@ export default function UserLayout({
           <MainNav className="mx-6" />
 
           <div className="ml-auto items-center flex space-x-4">
-            <div>
-              <Input
-               type="search"
-               placeholder="Search"
-               className="md:w-[100] lg:w-[300]"
-               />
-            </div>
+            <AdminSearch />
 
             <Menu />
           </div>
