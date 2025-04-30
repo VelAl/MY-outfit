@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 
 import { auth } from "@/auth";
+import { ClearAdminInputSearch } from "@/components/admin";
 import AppTable from "@/components/shared/appTable";
 import Pagination from "@/components/shared/pagination";
 import { getAllOrders } from "@/lib/actions/order.actions";
@@ -13,7 +14,7 @@ export const metadata: Metadata = {
 };
 
 type T_Props = {
-  searchParams: Promise<{ page?: string }>;
+  searchParams: Promise<{ page?: string; query?: string }>;
 };
 
 const AllOrdersPage = async ({ searchParams }: T_Props) => {
@@ -23,16 +24,21 @@ const AllOrdersPage = async ({ searchParams }: T_Props) => {
     throw new Error("User is not authorized.");
   }
 
-  const { page = "1" } = await searchParams;
+  const { page = "1", query = "" } = await searchParams;
 
   const { data, totalCount, totalPages } = await getAllOrders({
     pageNumber: +page,
     limit: PAGE_SIZE,
+    query,
   });
 
   return (
     <div className="space-y-2">
-      <h2 className="h2-bold">Orders ({totalCount})</h2>
+      <div className="flex items-center gap-3">
+        <h1 className="h2-bold">Orders ({totalCount})</h1>
+        <ClearAdminInputSearch query={query} href="/admin/orders" />
+      </div>
+
       <div className="overflow-x-auto">
         <AppTable columns={tableRows} entities={data} />
 

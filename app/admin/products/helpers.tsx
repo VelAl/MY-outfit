@@ -8,7 +8,7 @@ import { formatId, formatUSDPrice } from "@/lib/utils";
 
 export const columns: T_Columns<T_Product> = [
   { title: "ID", getCell: ({ id }) => formatId(id) },
-  { title: "Name", getCell: ({ name }) => name },
+  { title: "NAME", getCell: ({ name }) => name },
   {
     title: "PRICE",
     getCell: ({ price }) => formatUSDPrice(price),

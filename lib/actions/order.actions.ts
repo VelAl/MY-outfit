@@ -323,18 +323,39 @@ export const getOrdersSummary = async () => {
 export const getAllOrders = async ({
   limit = PAGE_SIZE,
   pageNumber,
+  query,
 }: {
   limit?: number;
   pageNumber: number;
+  query: string;
 }) => {
+  const queryFilter: Prisma.OrderWhereInput =
+    query && query !== "all"
+      ? {
+          user: {
+            name: {
+              contains: query,
+              mode: "insensitive",
+            },
+          },
+        }
+      : {};
+
   const data = await prisma.order.findMany({
+    where: {
+      ...queryFilter,
+    },
     orderBy: { createdAt: "desc" },
     take: limit,
     skip: (pageNumber - 1) * limit,
     include: { user: { select: { name: true } } },
   });
 
-  const totalCount = await prisma.order.count();
+  const totalCount = await prisma.order.count({
+    where: {
+      ...queryFilter,
+    },
+  });
   return {
     data,
     totalCount,

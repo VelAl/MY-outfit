@@ -1,6 +1,7 @@
 import Link from "next/link";
-import { Eraser, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
 
+import { ClearAdminInputSearch } from "@/components/admin";
 import AppTable from "@/components/shared/appTable";
 import Pagination from "@/components/shared/pagination";
 import { Button } from "@/components/ui/button";
@@ -30,19 +31,7 @@ const AdminProductsPage = async ({ searchParams }: T_Props) => {
       <div className="flex-between border-b pb-2">
         <div className="flex items-center gap-3">
           <h1 className="h2-bold">Products({total})</h1>
-          {query && (
-            <div className="flex gap-4">
-              Filtered by
-              <span>
-                {"`"}
-                <i>{query}</i>
-                {"`"}
-              </span>
-              <Link href="/admin/products">
-                <Eraser className="text-primary transition-transform duration-200 hover:scale-130" />
-              </Link>
-            </div>
-          )}
+          <ClearAdminInputSearch query={query} href="/admin/products" />
         </div>
 
         <Button asChild>

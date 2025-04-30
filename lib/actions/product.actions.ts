@@ -1,5 +1,6 @@
 "use server";
 import { revalidatePath } from "next/cache";
+import { Prisma } from "@prisma/client";
 
 import { T_AddProduct, T_UpdProduct } from "@/app-types-ts";
 import { prisma } from "@/db/prisma";
@@ -49,10 +50,25 @@ type T_Prop = {
   query: string;
 };
 
-export async function getAllProducts({ limit = PAGE_SIZE, page }: T_Prop) {
-  const total = await prisma.product.count();
+export async function getAllProducts({
+  limit = PAGE_SIZE,
+  page,
+  query,
+}: T_Prop) {
+  const queryFilter: Prisma.ProductWhereInput =
+    query && query !== "all"
+      ? {
+          name: {
+            contains: query,
+            mode: "insensitive",
+          },
+        }
+      : {};
+
+  const total = await prisma.product.count({ where: { ...queryFilter } });
 
   const data = await prisma.product.findMany({
+    where: { ...queryFilter },
     take: limit,
     skip: (page - 1) * limit,
     orderBy: { createdAt: "desc" },

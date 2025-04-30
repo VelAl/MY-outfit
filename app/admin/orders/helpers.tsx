@@ -1,13 +1,10 @@
-import { T_Columns, T_Order } from "@/app-types-ts";
+import { T_Columns } from "@/app-types-ts";
 import DeleteDialog from "@/components/shared/delete-dialog";
 import { ViewItemLink } from "@/components/shared/view-item-link";
-import { deleteOrder } from "@/lib/actions/order.actions";
+import { deleteOrder, getAllOrders } from "@/lib/actions/order.actions";
 import { formatDateTime, formatId, formatUSDPrice } from "@/lib/utils";
 
-type T_OrderFromDB = Pick<
-  T_Order,
-  "id" | "createdAt" | "totalPrice" | "paidAt" | "deliveredAt"
->;
+type T_OrderFromDB = Awaited<ReturnType<typeof getAllOrders>>["data"][number];
 
 export const tableRows: T_Columns<T_OrderFromDB> = [
   {
@@ -17,6 +14,10 @@ export const tableRows: T_Columns<T_OrderFromDB> = [
   {
     title: "CREATED",
     getCell: ({ createdAt }) => formatDateTime(createdAt).dateTime,
+  },
+  {
+    title: "BUYER",
+    getCell: ({ user }) => user.name,
   },
   {
     title: "TOTAL",
