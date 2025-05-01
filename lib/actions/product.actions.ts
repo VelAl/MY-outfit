@@ -46,8 +46,11 @@ export async function getProductByID(id: string) {
 type T_Prop = {
   category?: string;
   limit?: number;
-  page: number;
+  page: number | string;
   query: string;
+  price?: string;
+  rating?: string;
+  sort?: string;
 };
 
 export async function getAllProducts({
@@ -70,7 +73,7 @@ export async function getAllProducts({
   const data = await prisma.product.findMany({
     where: { ...queryFilter },
     take: limit,
-    skip: (page - 1) * limit,
+    skip: (Number(page) - 1) * limit,
     orderBy: { createdAt: "desc" },
   });
 
