@@ -27,3 +27,11 @@ export const getFilterUrl = (
 
   return `/search?${new URLSearchParams(params)}`;
 };
+
+export const priceRanges = [
+  [1, 30],
+  [31, 50],
+  [51, 100],
+  [101, 500],
+  [501, 1000],
+] as const;

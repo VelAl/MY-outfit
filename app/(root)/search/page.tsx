@@ -1,7 +1,12 @@
-import ProductCard from "@/components/shared/product/product-card";
-import { getAllProducts } from "@/lib/actions/product.actions";
+import Link from "next/link";
 
-import { getFilterUrl, normalizeSearchParams, T_SearchParams } from "./helpers";
+import ProductCard from "@/components/shared/product/product-card";
+import {
+  getAllCategories,
+  getAllProducts,
+} from "@/lib/actions/product.actions";
+
+import { getFilterUrl, normalizeSearchParams, priceRanges, T_SearchParams } from "./helpers";
 
 type T_Props = {
   searchParams: Promise<T_SearchParams>;
@@ -9,21 +14,84 @@ type T_Props = {
 
 const SearchPage = async ({ searchParams }: T_Props) => {
   const originSearchParams = await searchParams;
-  const normalisedSearParams = normalizeSearchParams(originSearchParams);
+  const normalisedSearchParams = normalizeSearchParams(originSearchParams);
+  const { category, price } = normalisedSearchParams;
 
+  const categories = await getAllCategories();
   const { data } = await getAllProducts({
-    ...normalisedSearParams,
-    query: normalisedSearParams.q,
+    ...normalisedSearchParams,
+    query: normalisedSearchParams.q,
   });
-
-  console.log(
-    "getFilterUrl ===>",
-    getFilterUrl({ category: "HOODIE" }, normalisedSearParams)
-  );
 
   return (
     <div className="grid md:grid-cols-5 md:gap-5">
-      <div className="filter-links">{/*FILTERS*/}</div>
+      <div className="filter-links">
+        {/* CATEGORY */}
+        <div>
+          <div className="text-xl font-bold mt-3 border-b">Category</div>
+          <ul className="spase-y-1">
+            <li className="pl-2">
+              <Link
+                href={getFilterUrl({ category: "all" }, normalisedSearchParams)}
+                className={`${
+                  (category === "all" || !category) &&
+                  "text-primary font-bold pointer-events-none"
+                } block w-full hover:bg-secondary rounded`}
+              >
+                All
+              </Link>
+            </li>
+            {categories.map(({ category: c }) => (
+              <ul key={c} className="spase-y-1">
+                <li className="pl-2 w-full">
+                  <Link
+                    href={getFilterUrl({ category: c }, normalisedSearchParams)}
+                    className={`${
+                      c === category &&
+                      "text-primary font-bold pointer-events-none"
+                    } block w-full hover:bg-secondary rounded`}
+                  >
+                    {c}
+                  </Link>
+                </li>
+              </ul>
+            ))}
+          </ul>
+        </div>
+
+        {/* PRICE */}
+        <div>
+          <div className="text-xl font-bold mt-3 border-b">Price</div>
+          <ul className="spase-y-1">
+            <li className="pl-2">
+              <Link
+                href={getFilterUrl({ price: "all" }, normalisedSearchParams)}
+                className={`${
+                  (price === "all" || !price) &&
+                  "text-primary font-bold pointer-events-none"
+                } block w-full hover:bg-secondary rounded`}
+              >
+                All
+              </Link>
+            </li>
+            {priceRanges.map(([from, to], i) => (
+              <ul key={i} className="spase-y-1">
+                <li className="pl-2 w-full">
+                  <Link
+                    href={getFilterUrl({ price:`${from}-${to}` }, normalisedSearchParams)}
+                    className={`${
+                      price === `${from}-${to}` &&
+                      "text-primary font-bold pointer-events-none"
+                    } block w-full hover:bg-secondary rounded`}
+                  >
+                    {`from $${from} to $${to}`}
+                  </Link>
+                </li>
+              </ul>
+            ))}
+          </ul>
+        </div>
+      </div>
 
       <div className="md:col-span-4 space-y-4">
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
