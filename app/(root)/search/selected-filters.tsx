@@ -43,24 +43,22 @@ const SelectedFilters = ({
   searchParams: T_NormalizedSearchParams;
 }) => {
   return (
-    <div className="flex-between flex-col my-4 md:flex-row">
-      <div className="flex flex-wrap items-center gap-x-3 text-gray-400">
-        {selectedFiltersArr.map(
-          ({ construct, key, title }) =>
-            _checkValue(searchParams[key]) && (
-              <div key={key} className="flex">
-                {title}:
-                <span className="text-foreground text-nowrap">
-                  {construct(searchParams)}
-                </span>
-                <Link href={clearParam(key, searchParams)}>
-                  <Eraser className="ml-1 text-primary transition-transform duration-200 hover:scale-130" />
-                </Link>
-                ;
-              </div>
-            )
-        )}
-      </div>
+    <div className="flex flex-wrap items-center gap-x-3 text-gray-400">
+      {selectedFiltersArr.map(
+        ({ construct, key, title }) =>
+          _checkValue(searchParams[key]) && (
+            <div key={key} className="flex">
+              {title}:
+              <span className="text-foreground text-nowrap">
+                {construct(searchParams)}
+              </span>
+              <Link href={clearParam(key, searchParams)}>
+                <Eraser className="ml-1 text-primary transition-transform duration-200 hover:scale-130" />
+              </Link>
+              ;
+            </div>
+          )
+      )}
     </div>
   );
 };

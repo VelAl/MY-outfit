@@ -11,6 +11,7 @@ import {
   normalizeSearchParams,
   priceRanges,
   ratings,
+  sortOrders,
   T_SearchParams,
 } from "./helpers";
 import SelectedFilters from "./selected-filters";
@@ -22,7 +23,7 @@ type T_Props = {
 const SearchPage = async ({ searchParams }: T_Props) => {
   const originSearchParams = await searchParams;
   const normalisedSearchParams = normalizeSearchParams(originSearchParams);
-  const { category, price, rating } = normalisedSearchParams;
+  const { category, price, rating, sort } = normalisedSearchParams;
 
   const categories = await getAllCategories();
   const { data } = await getAllProducts({
@@ -141,7 +142,22 @@ const SearchPage = async ({ searchParams }: T_Props) => {
       </div>
 
       <div className="md:col-span-4 space-y-4">
-        <SelectedFilters searchParams={normalisedSearchParams} />
+        <div className="flex-between my-4  ">
+          <SelectedFilters searchParams={normalisedSearchParams} />
+
+          <div>
+            <span className="text-nowrap">Sort by: </span>
+            {sortOrders.map((s) => (
+              <Link
+                key={s}
+                href={getFilterUrl({ sort: s }, normalisedSearchParams)}
+                className={`mx-1 hover:bg-secondary ${sort === s && "font-bold text-primary pointer-events-none"}`}
+              >
+                {s}
+              </Link>
+            ))}
+          </div>
+        </div>
 
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
           {!data.length && <div>No Products Found</div>}

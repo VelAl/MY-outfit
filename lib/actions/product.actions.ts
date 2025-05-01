@@ -50,16 +50,17 @@ type T_Prop = {
   query: string;
   price?: string;
   rating?: string;
-  sort?: string;
+  sort?: string; // "lowest" | "highest" | "rating" | "";
 };
 
 export async function getAllProducts({
   category,
-  limit = PAGE_SIZE,
+  limit = 6,
   page,
   price,
   rating,
   query,
+  sort,
 }: T_Prop) {
   // QUERY FILTER
   const queryFilter: Prisma.ProductWhereInput =
@@ -122,7 +123,14 @@ export async function getAllProducts({
     },
     take: limit,
     skip: (Number(page) - 1) * limit,
-    orderBy: { createdAt: "desc" },
+    orderBy:
+      sort === "lowest"
+        ? { price: "asc" }
+        : sort === "highest"
+        ? { price: "desc" }
+        : sort === "rating"
+        ? { rating: "desc" }
+        : { createdAt: "desc" },
   });
 
   return {

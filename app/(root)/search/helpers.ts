@@ -44,10 +44,12 @@ export const clearParam = (
 
 export const priceRanges = [
   [1, 30],
-  [31, 50],
-  [51, 100],
-  [101, 500],
-  [501, 1000],
+  [30, 50],
+  [50, 100],
+  [100, 500],
+  [500, 1000],
 ] as const;
 
 export const ratings = ["4", "3", "2", "1"] as const;
+
+export const sortOrders = ["newest", "lowest", "highest", "rating"] as const;
