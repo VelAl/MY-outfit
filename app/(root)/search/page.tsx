@@ -6,7 +6,14 @@ import {
   getAllProducts,
 } from "@/lib/actions/product.actions";
 
-import { getFilterUrl, normalizeSearchParams, priceRanges, T_SearchParams } from "./helpers";
+import {
+  getFilterUrl,
+  normalizeSearchParams,
+  priceRanges,
+  ratings,
+  T_SearchParams,
+} from "./helpers";
+import SelectedFilters from "./selected-filters";
 
 type T_Props = {
   searchParams: Promise<T_SearchParams>;
@@ -15,7 +22,7 @@ type T_Props = {
 const SearchPage = async ({ searchParams }: T_Props) => {
   const originSearchParams = await searchParams;
   const normalisedSearchParams = normalizeSearchParams(originSearchParams);
-  const { category, price } = normalisedSearchParams;
+  const { category, price, rating } = normalisedSearchParams;
 
   const categories = await getAllCategories();
   const { data } = await getAllProducts({
@@ -25,6 +32,7 @@ const SearchPage = async ({ searchParams }: T_Props) => {
 
   return (
     <div className="grid md:grid-cols-5 md:gap-5">
+      {/* ASIDE FILTERS */}
       <div className="filter-links">
         {/* CATEGORY */}
         <div>
@@ -78,7 +86,10 @@ const SearchPage = async ({ searchParams }: T_Props) => {
               <ul key={i} className="spase-y-1">
                 <li className="pl-2 w-full">
                   <Link
-                    href={getFilterUrl({ price:`${from}-${to}` }, normalisedSearchParams)}
+                    href={getFilterUrl(
+                      { price: `${from}-${to}` },
+                      normalisedSearchParams
+                    )}
                     className={`${
                       price === `${from}-${to}` &&
                       "text-primary font-bold pointer-events-none"
@@ -91,9 +102,47 @@ const SearchPage = async ({ searchParams }: T_Props) => {
             ))}
           </ul>
         </div>
+
+        {/* RATING */}
+        <div>
+          <div className="text-xl font-bold mt-3 border-b">Rating</div>
+          <ul className="spase-y-1">
+            <li className="pl-2">
+              <Link
+                href={getFilterUrl({ rating: "all" }, normalisedSearchParams)}
+                className={`${
+                  (rating === "all" || !rating) &&
+                  "text-primary font-bold pointer-events-none"
+                } block w-full hover:bg-secondary rounded`}
+              >
+                All
+              </Link>
+            </li>
+            {ratings.map((rate) => (
+              <ul key={rate} className="spase-y-1">
+                <li className="pl-2 w-full">
+                  <Link
+                    href={getFilterUrl(
+                      { rating: rate },
+                      normalisedSearchParams
+                    )}
+                    className={`${
+                      rating === rate &&
+                      "text-primary font-bold pointer-events-none"
+                    } block w-full hover:bg-secondary rounded`}
+                  >
+                    {`${rate} stars & UP`}
+                  </Link>
+                </li>
+              </ul>
+            ))}
+          </ul>
+        </div>
       </div>
 
       <div className="md:col-span-4 space-y-4">
+        <SelectedFilters searchParams={normalisedSearchParams} />
+
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
           {!data.length && <div>No Products Found</div>}
           {!!data.length &&

@@ -10,11 +10,12 @@ export const normalizeSearchParams = (params: T_SearchParams) => ({
   rating: params.rating ?? "all",
   sort: params.sort ?? "newest",
 });
+export type T_NormalizedSearchParams = ReturnType<typeof normalizeSearchParams>;
 
 // Construct filter url
 export const getFilterUrl = (
-  newParams: Omit<T_SearchParams, "q">,
-  prevParams: ReturnType<typeof normalizeSearchParams>
+  newParams: T_SearchParams,
+  prevParams: T_NormalizedSearchParams
 ) => {
   const params = {
     category: newParams.category || prevParams.category,
@@ -28,6 +29,19 @@ export const getFilterUrl = (
   return `/search?${new URLSearchParams(params)}`;
 };
 
+// Construct filter url with cleared param
+export const clearParam = (
+  key: keyof T_NormalizedSearchParams,
+  params: T_NormalizedSearchParams
+) => {
+  const withCleared = {
+    ...params,
+    [key]: "",
+  };
+
+  return `/search?${new URLSearchParams(withCleared)}`;
+};
+
 export const priceRanges = [
   [1, 30],
   [31, 50],
@@ -35,3 +49,5 @@ export const priceRanges = [
   [101, 500],
   [501, 1000],
 ] as const;
+
+export const ratings = ["4", "3", "2", "1"] as const;
