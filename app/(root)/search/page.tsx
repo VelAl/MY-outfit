@@ -1,35 +1,25 @@
 import ProductCard from "@/components/shared/product/product-card";
 import { getAllProducts } from "@/lib/actions/product.actions";
 
+import { getFilterUrl, normalizeSearchParams, T_SearchParams } from "./helpers";
+
 type T_Props = {
-  searchParams: Promise<{
-    q?: string;
-    category?: string;
-    price?: string;
-    rating?: string;
-    sort?: string;
-    page?: string;
-  }>;
+  searchParams: Promise<T_SearchParams>;
 };
 
 const SearchPage = async ({ searchParams }: T_Props) => {
-  const {
-    category = "all",
-    page = "1",
-    price = "all",
-    q = "all",
-    rating = "all",
-    sort = "newest",
-  } = await searchParams;
+  const originSearchParams = await searchParams;
+  const normalisedSearParams = normalizeSearchParams(originSearchParams);
 
   const { data } = await getAllProducts({
-    page,
-    query: q,
-    category,
-    price,
-    rating,
-    sort,
+    ...normalisedSearParams,
+    query: normalisedSearParams.q,
   });
+
+  console.log(
+    "getFilterUrl ===>",
+    getFilterUrl({ category: "HOODIE" }, normalisedSearParams)
+  );
 
   return (
     <div className="grid md:grid-cols-5 md:gap-5">
