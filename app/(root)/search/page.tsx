@@ -1,3 +1,4 @@
+import { Metadata } from "next";
 import Link from "next/link";
 
 import ProductCard from "@/components/shared/product/product-card";
@@ -15,6 +16,10 @@ import {
   T_SearchParams,
 } from "./helpers";
 import SelectedFilters from "./selected-filters";
+
+export const metaData: Metadata = {
+  title: "Search",
+};
 
 type T_Props = {
   searchParams: Promise<T_SearchParams>;
@@ -38,7 +43,7 @@ const SearchPage = async ({ searchParams }: T_Props) => {
         {/* CATEGORY */}
         <div>
           <div className="text-xl font-bold mt-3 border-b">Category</div>
-          <ul className="spase-y-1">
+          <ul>
             <li className="pl-2">
               <Link
                 href={getFilterUrl({ category: "all" }, normalisedSearchParams)}
@@ -51,19 +56,17 @@ const SearchPage = async ({ searchParams }: T_Props) => {
               </Link>
             </li>
             {categories.map(({ category: c }) => (
-              <ul key={c} className="spase-y-1">
-                <li className="pl-2 w-full">
-                  <Link
-                    href={getFilterUrl({ category: c }, normalisedSearchParams)}
-                    className={`${
-                      c === category &&
-                      "text-primary font-bold pointer-events-none"
-                    } block w-full hover:bg-secondary rounded`}
-                  >
-                    {c}
-                  </Link>
-                </li>
-              </ul>
+              <li key={c} className="pl-2 w-full">
+                <Link
+                  href={getFilterUrl({ category: c }, normalisedSearchParams)}
+                  className={`${
+                    c === category &&
+                    "text-primary font-bold pointer-events-none"
+                  } block w-full hover:bg-secondary rounded`}
+                >
+                  {c}
+                </Link>
+              </li>
             ))}
           </ul>
         </div>
@@ -71,7 +74,7 @@ const SearchPage = async ({ searchParams }: T_Props) => {
         {/* PRICE */}
         <div>
           <div className="text-xl font-bold mt-3 border-b">Price</div>
-          <ul className="spase-y-1">
+          <ul>
             <li className="pl-2">
               <Link
                 href={getFilterUrl({ price: "all" }, normalisedSearchParams)}
@@ -107,7 +110,7 @@ const SearchPage = async ({ searchParams }: T_Props) => {
         {/* RATING */}
         <div>
           <div className="text-xl font-bold mt-3 border-b">Rating</div>
-          <ul className="spase-y-1">
+          <ul>
             <li className="pl-2">
               <Link
                 href={getFilterUrl({ rating: "all" }, normalisedSearchParams)}
@@ -151,7 +154,9 @@ const SearchPage = async ({ searchParams }: T_Props) => {
               <Link
                 key={s}
                 href={getFilterUrl({ sort: s }, normalisedSearchParams)}
-                className={`mx-1 hover:bg-secondary ${sort === s && "font-bold text-primary pointer-events-none"}`}
+                className={`mx-1 hover:bg-secondary ${
+                  sort === s && "font-bold text-primary pointer-events-none"
+                }`}
               >
                 {s}
               </Link>
