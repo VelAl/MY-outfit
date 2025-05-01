@@ -8,6 +8,7 @@ import {
   insertOrderItemSchema,
   insertOrderSchema,
   insertProductsSchema,
+  insertReviewSchema,
   paymentMethodSchema,
   paymentResultSchema,
   shippingAddressSchema,
@@ -87,3 +88,11 @@ export type T_User = {
   updatedAt: Date | null;
 };
 export type T_UdateUser = z.infer<typeof updateUserSchema>;
+
+export type T_InsertReview = z.infer<typeof insertReviewSchema>;
+export type T_Review = T_InsertReview & {
+  id: string;
+  isVerifiedPurchase: boolean;
+  createdAt: Date;
+  user?: Pick<T_User, "name">;
+};

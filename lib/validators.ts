@@ -153,3 +153,15 @@ export const insertOrderItemSchema = z.object({
   slug: z.string().min(1, "Product slug item is required"),
   image: z.string().min(1, "Product image is required"),
 });
+
+//_______REVIEW______________________________________________________________
+export const insertReviewSchema = z.object({
+  userId: z.string().nonempty("User ID is required"),
+  productId: z.string().nonempty(), //+
+  rating: z.coerce.number().min(0).max(5).int(),
+  title: z.string().min(3, "Title must be at least 3 charecters"), //+
+  description: z //+
+    .string()
+    .min(3, "Description must be at least 3 charecters")
+    .max(90),
+});
