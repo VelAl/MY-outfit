@@ -78,3 +78,30 @@ export const manageReview = async (data: T_InsertReview) => {
     return createErrMsg(formatError(error));
   }
 };
+
+// get all reviews for a product
+export const getProductReviews = async ({
+  productId,
+}: {
+  productId: string;
+}) => {
+  const data = await prisma.review.findMany({
+    where: { productId },
+    include: { user: { select: { name: true } } },
+    orderBy: { createdAt: "desc" },
+  });
+
+  return data;
+};
+
+// get specific review
+type T_Props = { productId: string };
+export const getReview = async ({ productId }: T_Props) => {
+  const { id } = await checkAuthentication();
+
+  const review = await prisma.review.findFirst({
+    where: { productId, userId: id },
+  });
+
+  return review;
+};
