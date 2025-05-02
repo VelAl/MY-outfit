@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { StarIcon } from "lucide-react";
 
 import { auth } from "@/auth";
 import { AddToCart, ProductImages } from "@/components/shared/product";
@@ -38,8 +39,10 @@ const ProductsDetailsPage = async ({ params }: I_Props) => {
                 <b>{product.brand}</b> {product.category}
               </p>
               <h1 className="h3-bold">{product.name}</h1>
-              <p>
-                {product.rating} of {product.numReviews} Reviews
+              <p className="flex">
+                {product.rating}{" "}
+                <StarIcon className="mx-2 fill-yellow-300 text-yellow-300" /> of{" "}
+                {product.numReviews} Reviews
               </p>
               <div className="flex flex-col sm:flex-row sm:items-center gap-3">
                 <ProductPice

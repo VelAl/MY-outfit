@@ -12,11 +12,19 @@ type T_Props = Record<"productId" | "productSlug" | "userId", string>;
 const ReviewList = ({ productId, productSlug, userId }: T_Props) => {
   const [reviews, setReviews] = useState<T_Review[]>([]);
 
+  const _reload = () => {
+    console.log('value ===>');
+  };
+
   return (
     <div className="space-y-2">
       {!reviews.length && <div>No reviews yet</div>}
       {userId ? (
-        <RevieForm productId={productId} userId={userId} />
+        <RevieForm
+          productId={productId}
+          userId={userId}
+          onReviewSubmitted={_reload}
+        />
       ) : (
         <div>
           Please
