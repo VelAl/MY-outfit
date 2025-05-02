@@ -5,7 +5,7 @@ import Link from "next/link";
 import { T_Product } from "@/app-types-ts";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
-import ProductPice from "./product-pice";
+import ProductPrice from "./product-price";
 import Rating from "./rating";
 
 type I_Props = {
@@ -36,7 +36,7 @@ const ProductCard: FC<I_Props> = ({ product }) => {
           <Rating value={+product.rating} />
 
           {!!product.stock ? (
-            <ProductPice value={+product.price} />
+            <ProductPrice value={+product.price} />
           ) : (
             <p className="text-destructive">Out of stock</p>
           )}

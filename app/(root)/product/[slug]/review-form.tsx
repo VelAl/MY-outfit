@@ -34,7 +34,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { manageReview } from "@/lib/actions/review.actions";
+import { getReview, manageReview } from "@/lib/actions/review.actions";
 import { insertReviewSchema } from "@/lib/validators";
 
 type T_Props = {
@@ -45,7 +45,7 @@ type T_Props = {
 
 const ratingOptions = Array.from({ length: 5 }, (_, i) => `${i + 1}`);
 
-const RevieForm = ({ productId, userId, onReviewSubmitted }: T_Props) => {
+const ReviewForm = ({ productId, userId, onReviewSubmitted }: T_Props) => {
   const [open, setOpen] = useState(false);
 
   const form = useForm<T_InsertReview>({
@@ -64,9 +64,19 @@ const RevieForm = ({ productId, userId, onReviewSubmitted }: T_Props) => {
     }
   };
 
+  const _handleOpenForm = async () => {
+    setOpen(true);
+    const review = await getReview(productId);
+    if (review) {
+      form.setValue("title", review.title);
+      form.setValue("description", review.description);
+      form.setValue("rating", review.rating);
+    }
+  };
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <Button onClick={() => setOpen(true)}>Write A Review</Button>
+      <Button onClick={_handleOpenForm}>Write A Review</Button>
 
       <DialogContent className="sm:max-w-[425px]">
         <Form {...form}>
@@ -160,4 +170,4 @@ const RevieForm = ({ productId, userId, onReviewSubmitted }: T_Props) => {
     </Dialog>
   );
 };
-export default RevieForm;
+export default ReviewForm;

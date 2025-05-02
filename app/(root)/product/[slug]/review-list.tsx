@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { Calendar, UserIcon } from "lucide-react";
+import { toast } from "sonner";
 
 import { T_Review } from "@/app-types-ts";
 import Rating from "@/components/shared/product/rating";
@@ -14,35 +15,37 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { getProductReviews } from "@/lib/actions/review.actions";
-import { formatDateTime } from "@/lib/utils";
+import { formatDateTime, formatError } from "@/lib/utils";
 
-import RevieForm from "./review-form";
+import ReviewForm from "./review-form";
 
 type T_Props = Record<"productId" | "productSlug" | "userId", string>;
 
 const ReviewList = ({ productId, productSlug, userId }: T_Props) => {
   const [reviews, setReviews] = useState<T_Review[]>([]);
 
-  useEffect(() => {
-    (async () => {
+  const fetchReviews = useCallback(async () => {
+    try {
       const reviews = await getProductReviews(productId);
 
       setReviews(reviews);
-    })();
+    } catch (error) {
+      toast.error(formatError(error));
+    }
   }, [productId]);
 
-  const _reload = () => {
-    console.log("value ===>");
-  };
+  useEffect(() => {
+    fetchReviews();
+  }, [productId, fetchReviews]);
 
   return (
     <div className="space-y-2">
       {!reviews.length && <div>No reviews yet</div>}
       {userId ? (
-        <RevieForm
+        <ReviewForm
           productId={productId}
           userId={userId}
-          onReviewSubmitted={_reload}
+          onReviewSubmitted={fetchReviews}
         />
       ) : (
         <div>
@@ -53,7 +56,7 @@ const ReviewList = ({ productId, productSlug, userId }: T_Props) => {
           >
             Sign In
           </Link>
-          to write in review
+          to write a review
         </div>
       )}
 
@@ -69,7 +72,7 @@ const ReviewList = ({ productId, productSlug, userId }: T_Props) => {
 
             <CardContent>
               <div className="flex space-x-4 text-sm text-muted-foreground">
-                <Rating value={review.rating}/>
+                <Rating value={review.rating} />
 
                 <div className="flex items-center">
                   <UserIcon className="mr-1 h-4 w-4 text-primary" />

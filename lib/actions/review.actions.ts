@@ -91,8 +91,8 @@ export const getProductReviews = async (productId: string) => {
 };
 
 // get specific review
-type T_Props = { productId: string };
-export const getReview = async ({ productId }: T_Props) => {
+
+export const getReview = async (productId: string) => {
   const { id } = await checkAuthentication();
 
   const review = await prisma.review.findFirst({

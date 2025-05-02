@@ -7,7 +7,7 @@ type I_Props = {
   className?: string;
 };
 
-const ProductPice: FC<I_Props> = ({ value, className }) => {
+const ProductPrice: FC<I_Props> = ({ value, className }) => {
   const [intVal, floatVal] = value.toFixed(2).split(".");
 
   return (
@@ -18,4 +18,4 @@ const ProductPice: FC<I_Props> = ({ value, className }) => {
     </p>
   );
 };
-export default ProductPice;
+export default ProductPrice;

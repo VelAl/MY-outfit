@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 
 import { auth } from "@/auth";
 import { AddToCart, ProductImages } from "@/components/shared/product";
-import ProductPice from "@/components/shared/product/product-pice";
+import ProductPrice from "@/components/shared/product/product-price";
 import Rating from "@/components/shared/product/rating";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
@@ -43,7 +43,7 @@ const ProductsDetailsPage = async ({ params }: I_Props) => {
               <Rating value={+product.rating} />
               <p>{product.numReviews} reviews</p>
               <div className="flex flex-col sm:flex-row sm:items-center gap-3">
-                <ProductPice
+                <ProductPrice
                   value={+product.price}
                   className="w-24 rounded-full bg-green-100 text-green-700 px-5 py-2"
                 />
@@ -63,7 +63,7 @@ const ProductsDetailsPage = async ({ params }: I_Props) => {
                 <div className="mb-2 flex justify-between">
                   <div>Price</div>
                   <div>
-                    <ProductPice value={+product.price} />
+                    <ProductPrice value={+product.price} />
                   </div>
                 </div>
 
