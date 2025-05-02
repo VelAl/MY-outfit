@@ -6,6 +6,7 @@ import { T_Product } from "@/app-types-ts";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
 import ProductPice from "./product-pice";
+import Rating from "./rating";
 
 type I_Props = {
   product: T_Product;
@@ -32,7 +33,7 @@ const ProductCard: FC<I_Props> = ({ product }) => {
           <h2 className="text-sm font-medium">{product.name}</h2>
         </Link>
         <div className="flex-between gap-4 h-8 border-t-2">
-          <p>{product.rating} Stars</p>
+          <Rating value={+product.rating} />
 
           {!!product.stock ? (
             <ProductPice value={+product.price} />

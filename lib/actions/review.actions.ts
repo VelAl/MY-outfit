@@ -80,11 +80,7 @@ export const manageReview = async (data: T_InsertReview) => {
 };
 
 // get all reviews for a product
-export const getProductReviews = async ({
-  productId,
-}: {
-  productId: string;
-}) => {
+export const getProductReviews = async (productId: string) => {
   const data = await prisma.review.findMany({
     where: { productId },
     include: { user: { select: { name: true } } },
