@@ -5,7 +5,7 @@ import { Prisma } from "@prisma/client";
 import { T_AddProduct, T_UpdProduct } from "@/app-types-ts";
 import { prisma } from "@/db/prisma";
 
-import { LATEST_PRODS_LIMIT, PAGE_SIZE } from "../constants";
+import { LATEST_PRODS_LIMIT } from "../constants";
 import {
   convertToPlainObject,
   createErrMsg,
