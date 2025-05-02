@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 
+import { auth } from "@/auth";
 import { AddToCart, ProductImages } from "@/components/shared/product";
 import ProductPice from "@/components/shared/product/product-pice";
 import { Badge } from "@/components/ui/badge";
@@ -7,10 +8,14 @@ import { Card, CardContent } from "@/components/ui/card";
 import { getMyCart } from "@/lib/actions/cart.actions";
 import { getProductBySlug } from "@/lib/actions/product.actions";
 
+import ReviewList from "./review-list";
+
 type I_Props = { params: Promise<{ slug: string }> };
 
 const ProductsDetailsPage = async ({ params }: I_Props) => {
+  const session = await auth();
   const { slug } = await params;
+  const userId = session?.user?.id;
   const product = await getProductBySlug(slug);
 
   if (!product) notFound();
@@ -94,6 +99,15 @@ const ProductsDetailsPage = async ({ params }: I_Props) => {
             </Card>
           </div>
         </div>
+      </section>
+      <section className="mt-8">
+        <h2 className="h2-bold">Reviews</h2>
+
+        <ReviewList
+          productId={product.id}
+          productSlug={slug}
+          userId={userId || ""}
+        />
       </section>
     </>
   );
