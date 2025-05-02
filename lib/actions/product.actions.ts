@@ -10,7 +10,7 @@ import {
   convertToPlainObject,
   createErrMsg,
   createSuccessMsg,
-  formatErorr,
+  formatError,
 } from "../utils";
 import { insertProductsSchema, updateProductSchema } from "../validators";
 
@@ -151,7 +151,7 @@ export const deleteProduct = async (id: string) => {
 
     return createSuccessMsg("The Product has been deleted successfully.");
   } catch (error) {
-    return createErrMsg(formatErorr(error));
+    return createErrMsg(formatError(error));
   }
 };
 
@@ -167,7 +167,7 @@ export const createProduct = async (data: T_AddProduct) => {
 
     return createSuccessMsg("New Product has been added successfully.");
   } catch (error) {
-    return createErrMsg(formatErorr(error));
+    return createErrMsg(formatError(error));
   }
 };
 
@@ -184,7 +184,7 @@ export const updateProduct = async (data: T_UpdProduct) => {
 
     return createSuccessMsg("The Product has been updated successfully.");
   } catch (error) {
-    return createErrMsg(formatErorr(error));
+    return createErrMsg(formatError(error));
   }
 };
 

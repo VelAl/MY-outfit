@@ -19,7 +19,7 @@ export function convertToPlainObject<T>(value: T): T {
 export const fomatNumWithDecimals = (num: number) => num.toFixed(2);
 
 //Handle Errors
-export const formatErorr = (err: unknown) => {
+export const formatError = (err: unknown) => {
   if (err instanceof ZodError) {
     const errors = err.errors.map(
       (errField) => `${errField.path[0]}: ${errField.message}`

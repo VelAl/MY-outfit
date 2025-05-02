@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 import { T_InsertReview } from "@/app-types-ts";
 import { prisma } from "@/db/prisma";
 
-import { createErrMsg, createSuccessMsg, formatErorr } from "../utils";
+import { createErrMsg, createSuccessMsg, formatError } from "../utils";
 import { insertReviewSchema } from "../validators";
 
 import { checkAuthentication } from "./helpers";
@@ -24,14 +24,14 @@ export const manageReview = async (data: T_InsertReview) => {
     }
 
     //check if user have already reviewed the product
-    const reviewExists = await prisma.rview.findFirst({
+    const reviewExists = await prisma.review.findFirst({
       where: { productId: review.productId, userId: review.userId },
     });
 
     await prisma.$transaction(async (tx) => {
       if (reviewExists) {
         // Update the review
-        await tx.rview.update({
+        await tx.review.update({
           where: { id: reviewExists.id },
           data: {
             title: review.title,
@@ -41,19 +41,19 @@ export const manageReview = async (data: T_InsertReview) => {
         });
       } else {
         // Create the review
-        await tx.rview.create({
+        await tx.review.create({
           data: review,
         });
       }
 
       // get avarage rating
-      const avarageRating = await tx.rview.aggregate({
+      const avarageRating = await tx.review.aggregate({
         _avg: { rating: true },
         where: { productId: review.productId },
       });
 
       // get number of reviews
-      const numReviews = await tx.rview.count({
+      const numReviews = await tx.review.count({
         where: { productId: review.productId },
       });
 
@@ -75,6 +75,6 @@ export const manageReview = async (data: T_InsertReview) => {
       } successfully!`
     );
   } catch (error) {
-    return createErrMsg(formatErorr(error));
+    return createErrMsg(formatError(error));
   }
 };

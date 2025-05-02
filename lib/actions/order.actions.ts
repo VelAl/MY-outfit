@@ -19,7 +19,7 @@ import {
   convertToPlainObject,
   createErrMsg,
   createSuccessMsg,
-  formatErorr,
+  formatError,
 } from "../utils";
 import { insertOrderSchema } from "../validators";
 
@@ -103,7 +103,7 @@ export const createOrder = async (): Promise<
   } catch (error) {
     if (isRedirectError(error)) throw error;
 
-    return createErrMsg(formatErorr(error));
+    return createErrMsg(formatError(error));
   }
 };
 
@@ -158,7 +158,7 @@ export const createPayPalOrder = async (orderId: string) => {
       data: paypalOrder.id as string,
     };
   } catch (error) {
-    return createErrMsg(formatErorr(error));
+    return createErrMsg(formatError(error));
   }
 };
 
@@ -198,7 +198,7 @@ export const approvePayPalOrder = async (
 
     return createSuccessMsg("The Order has been paid successfully!");
   } catch (error) {
-    return createErrMsg(formatErorr(error));
+    return createErrMsg(formatError(error));
   }
 };
 
@@ -374,7 +374,7 @@ export const deleteOrder = async (id: string) => {
 
     return createSuccessMsg("The order has been deleted successfully.");
   } catch (error) {
-    return createErrMsg(formatErorr(error));
+    return createErrMsg(formatError(error));
   }
 };
 
@@ -389,7 +389,7 @@ export const updateOrderToPaidCOD = async (orderId: string) => {
 
     return createSuccessMsg("the Order marked as paid!");
   } catch (err) {
-    return createErrMsg(formatErorr(err));
+    return createErrMsg(formatError(err));
   }
 };
 
@@ -411,6 +411,6 @@ export const updateOrderToDelivered = async (id: string) => {
 
     return createSuccessMsg("The Order is marked as delivered");
   } catch (err) {
-    return createErrMsg(formatErorr(err));
+    return createErrMsg(formatError(err));
   }
 };

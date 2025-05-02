@@ -11,7 +11,7 @@ import {
   convertToPlainObject,
   createErrMsg,
   createSuccessMsg,
-  formatErorr,
+  formatError,
   round2,
 } from "../utils";
 import { cartItemSchema, insertCartSchema } from "../validators";
@@ -112,7 +112,7 @@ export const addItemToCart = async (data: T_CartItem): Promise<T_Message> => {
       );
     }
   } catch (error) {
-    return createErrMsg(formatErorr(error));
+    return createErrMsg(formatError(error));
   }
 };
 
@@ -182,6 +182,6 @@ export const removeItemFromCart = async (
 
     return createSuccessMsg(`${product.name} removed from the cart`);
   } catch (error) {
-    return createErrMsg(formatErorr(error));
+    return createErrMsg(formatError(error));
   }
 };

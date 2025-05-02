@@ -16,7 +16,7 @@ import { auth, signIn, signOut } from "@/auth";
 import { prisma } from "@/db/prisma";
 
 import { PAGE_SIZE } from "../constants";
-import { createErrMsg, createSuccessMsg, formatErorr } from "../utils";
+import { createErrMsg, createSuccessMsg, formatError } from "../utils";
 import {
   paymentMethodSchema,
   shippingAddressSchema,
@@ -85,7 +85,7 @@ export const signUpUser = async (
       throw error;
     }
 
-    return createErrMsg(formatErorr(error));
+    return createErrMsg(formatError(error));
   }
 };
 
@@ -101,7 +101,7 @@ export const getUserById = async (id: string) => {
     const { password, address, ...safeUser } = user;
     return { ...safeUser, address: address as T_User["address"] };
   } catch (err) {
-    console.error(formatErorr(err));
+    console.error(formatError(err));
     return null;
   }
 };
@@ -128,7 +128,7 @@ export const updUserAddress = async (
 
     return createSuccessMsg("User`s address updated successfully!");
   } catch (error) {
-    return createErrMsg(formatErorr(error));
+    return createErrMsg(formatError(error));
   }
 };
 
@@ -153,7 +153,7 @@ export const updUserPaymentMethod = async (
 
     return createSuccessMsg("Payment method has been updated successfully!");
   } catch (error) {
-    return createErrMsg(formatErorr(error));
+    return createErrMsg(formatError(error));
   }
 };
 
@@ -174,7 +174,7 @@ export const updUserProfile = async (data: T_UpdUserProfileProp) => {
 
     return createSuccessMsg("Profile has been updated successfully!");
   } catch (error) {
-    return createErrMsg(formatErorr(error));
+    return createErrMsg(formatError(error));
   }
 };
 
@@ -192,7 +192,7 @@ export const updUserProfileByAdmin = async (data: T_UdateUser) => {
 
     return createSuccessMsg("The User`s info has been updated successfully!");
   } catch (error) {
-    return createErrMsg(formatErorr(error));
+    return createErrMsg(formatError(error));
   }
 };
 
@@ -278,6 +278,6 @@ export const deleteUser = async (id: string) => {
 
     return createSuccessMsg("User has been deleted.");
   } catch (error) {
-    return createErrMsg(formatErorr(error));
+    return createErrMsg(formatError(error));
   }
 };

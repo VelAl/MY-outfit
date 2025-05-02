@@ -25,7 +25,7 @@ model Product {
   banner      String?
   createdAt   DateTime    @default(now()) @db.Timestamp(6)
   OrderItem   OrderItem[]
-  Rview       Rview[]
+  Review      Review[]
 }
 
 //____________USER___________________________
@@ -50,7 +50,7 @@ model User {
   session       Session[]
   Cart          Cart[]
   Order         Order[]
-  Rview         Rview[]
+  Review        Review[]
 }
 
 //____________ACCOUNT___________________________
@@ -144,7 +144,7 @@ model Order {
 }
 
 //____________REVIEW______________________________
-model Rview {
+model Review {
   id                 String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   userId             String   @db.Uuid
   productId          String   @db.Uuid
