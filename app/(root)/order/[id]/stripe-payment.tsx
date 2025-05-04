@@ -49,7 +49,7 @@ const StripePayment = ({ clientSecret, priceInCents, orderId }: T_Props) => {
         .confirmPayment({
           elements,
           confirmParams: {
-            return_url: `${SERVER_URL}/order/${orderId}/stripe/stripe-payment-success`,
+            return_url: `${SERVER_URL}/order/${orderId}/stripe-payment-success`,
           },
         })
         .then(({ error }) => {
@@ -66,7 +66,7 @@ const StripePayment = ({ clientSecret, priceInCents, orderId }: T_Props) => {
     };
 
     return (
-      <form className="space-y-4" onSubmit={_submit}>
+      <form onSubmit={_submit}>
         <div className="text-xl">Stripe Checkout</div>
         {errorMsg && <div className="text-destructive">{errorMsg}</div>}
 
