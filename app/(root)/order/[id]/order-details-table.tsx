@@ -21,9 +21,21 @@ import { formatDateTime, formatId } from "@/lib/utils";
 
 import MarkOrderAsDeliveredBtn from "./mark-as-delivered-btn";
 import MarkOrderAsPaidBtn from "./mark-as-paid-btn";
+import StripePayment from "./stripe-payment";
 
-type T_Props = { order: T_Order; isAdmin: boolean; paypalClientId: string };
-const OrderDetailsTable = ({ order, isAdmin, paypalClientId }: T_Props) => {
+type T_Props = {
+  order: T_Order;
+  isAdmin: boolean;
+  paypalClientId: string;
+  stripeClientSecret: string | null;
+};
+
+const OrderDetailsTable = ({
+  order,
+  isAdmin,
+  paypalClientId,
+  stripeClientSecret,
+}: T_Props) => {
   const _handleCreatePayPalOrder = async () => {
     const res = await createPayPalOrder(order.id);
 
@@ -61,6 +73,7 @@ const OrderDetailsTable = ({ order, isAdmin, paypalClientId }: T_Props) => {
   return (
     <>
       <h1 className="py-4 text-2xl">Order {formatId(order.id)}</h1>
+
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
         <div className="col-span-2 space-y-4 overflow-x-auto ">
           <Card className="p-0">
@@ -124,6 +137,7 @@ const OrderDetailsTable = ({ order, isAdmin, paypalClientId }: T_Props) => {
 
         <div>
           <OrderSummaryCard entity={order}>
+            {/* PAYPAL_PAYMENT */}
             {!order.isPaid && order.paymentMethod === "PayPal" && (
               <div className="pt-4">
                 <PayPalScriptProvider
@@ -138,6 +152,15 @@ const OrderDetailsTable = ({ order, isAdmin, paypalClientId }: T_Props) => {
                   />
                 </PayPalScriptProvider>
               </div>
+            )}
+
+            {/* STRIPE_PAYMENT */}
+            {stripeClientSecret && (
+              <StripePayment
+                clientSecret={stripeClientSecret}
+                orderId={order.id}
+                priceInCents={Number(order.totalPrice) * 100}
+              />
             )}
           </OrderSummaryCard>
         </div>
