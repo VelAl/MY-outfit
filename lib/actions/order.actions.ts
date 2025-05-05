@@ -12,6 +12,7 @@ import {
 } from "@/app-types-ts";
 import { auth } from "@/auth";
 import { prisma } from "@/db/prisma";
+import { sendPurchaseReceived } from "@/email";
 
 import { PAGE_SIZE } from "../constants";
 import { paypal } from "../paypal";
@@ -247,6 +248,15 @@ export async function updateOrderToPaid({
   });
 
   if (!updatedOrder) throw new Error("Order not found");
+
+  sendPurchaseReceived({
+    order: {
+      ...updatedOrder,
+      shippingAddress: updatedOrder.shippingAddress as T_ShippingAddress,
+      paymentResult: updatedOrder.paymentResult as T_PaymentResult,
+      orderItems: updatedOrder.OrderItem,
+    },
+  });
 }
 
 // get user`s orders

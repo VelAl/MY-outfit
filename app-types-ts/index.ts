@@ -64,6 +64,7 @@ export type T_Order = T_InsertOrder & {
   deliveredAt: Date | null;
   orderItems: T_InsertOrderItem[];
   user: { name: string; email: string };
+  paymentResult: T_PaymentResult | null
 };
 
 export type T_Columns<T> = {
