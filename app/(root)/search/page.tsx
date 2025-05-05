@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import Link from "next/link";
 
+import Pagination from "@/components/shared/pagination";
 import ProductCard from "@/components/shared/product/product-card";
 import {
   getAllCategories,
@@ -28,10 +29,10 @@ type T_Props = {
 const SearchPage = async ({ searchParams }: T_Props) => {
   const originSearchParams = await searchParams;
   const normalisedSearchParams = normalizeSearchParams(originSearchParams);
-  const { category, price, rating, sort } = normalisedSearchParams;
+  const { category, price, rating, sort, page = 1 } = normalisedSearchParams;
 
   const categories = await getAllCategories();
-  const { data } = await getAllProducts({
+  const { data, totalPages } = await getAllProducts({
     ...normalisedSearchParams,
     query: normalisedSearchParams.q,
   });
@@ -164,13 +165,17 @@ const SearchPage = async ({ searchParams }: T_Props) => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-3 justify-items-center">
           {!data.length && <div>No Products Found</div>}
           {!!data.length &&
             data.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
         </div>
+      </div>
+
+      <div className="mt-4 md:mt-0 md:col-span-5 flex justify-center ">
+        <Pagination page={page} totalPages={totalPages} />
       </div>
     </div>
   );

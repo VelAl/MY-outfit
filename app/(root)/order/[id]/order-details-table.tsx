@@ -82,7 +82,7 @@ const OrderDetailsTable = ({
               <p className="pl-2 mb-2">{order.paymentMethod}</p>
               <div className="flex justify-between items-center">
                 {order.isPaid ? (
-                  <Badge variant="secondary">
+                  <Badge variant="success">
                     Paid at {formatDateTime(order.paidAt!).dateTime}
                   </Badge>
                 ) : (
@@ -110,7 +110,7 @@ const OrderDetailsTable = ({
               </p>
               <div className="flex justify-between items-center">
                 {order.isDelivered ? (
-                  <Badge variant="secondary">
+                  <Badge variant="success">
                     Paid at {formatDateTime(order.deliveredAt!).dateTime}
                   </Badge>
                 ) : (

@@ -16,7 +16,7 @@ const ProductCard: FC<I_Props> = ({ product }) => {
   return (
     <Card className="w-full max-w-sm bg-muted">
       <CardHeader className="p-0 items-center">
-        <Link href={`/product/${product.slug}`} className="m-4">
+        <Link href={`/product/${product.slug}`} className="m-4 flex justify-center">
           <Image
             className="rounded-sm"
             src={product.images[0]}
@@ -32,7 +32,7 @@ const ProductCard: FC<I_Props> = ({ product }) => {
         <Link href={`/product/${product.slug}`} className="flex-grow-1">
           <h2 className="text-sm font-medium">{product.name}</h2>
         </Link>
-        <div className="flex-between gap-4 h-8 border-t-2">
+        <div className="flex-between gap-4 h-8 border-t-2 flex-wrap">
           <Rating value={+product.rating} />
 
           {!!product.stock ? (

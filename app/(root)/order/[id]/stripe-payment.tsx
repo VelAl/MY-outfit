@@ -79,7 +79,7 @@ const StripePayment = ({ clientSecret, priceInCents, orderId }: T_Props) => {
         </div>
 
         <Button
-          className="w-full"
+          className="w-full mt-4"
           size="lg"
           disabled={!stripe || !elements || loading}
         >
