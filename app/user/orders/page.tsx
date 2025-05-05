@@ -17,7 +17,7 @@ const OrdersPage = async ({ searchParams }: T_Props) => {
 
   return (
     <div className="space-y-2">
-      <h2 className="h2-bold">Orders ({orders.totalCount})</h2>
+      <h2 className="h2-bold">Orders({orders.totalCount})</h2>
       <div className="overflow-x-auto">
         <AppTable columns={tableRows} entities={orders.data} />
 

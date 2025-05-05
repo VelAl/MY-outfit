@@ -37,14 +37,14 @@ export const columns: T_Columns<T_User & { unpaidOrdersCount: number }> = [
     classNameCell:
       "sticky right-0 bg-background z-10 flex gap-2 justify-end pr-4 ",
     getCell: ({ id, unpaidOrdersCount }) => (
-      <>
+      <div className="flex items-center">
         <DeleteDialog
           id={id}
           action={deleteUser}
           disabled={!!unpaidOrdersCount}
         />
         <ViewItemLink href={`/admin/users/${id}`} />
-      </>
+      </div>
     ),
   },
 ];

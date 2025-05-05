@@ -35,7 +35,7 @@ const AllOrdersPage = async ({ searchParams }: T_Props) => {
   return (
     <div className="space-y-2">
       <div className="flex items-center gap-3">
-        <h1 className="h2-bold">Orders ({totalCount})</h1>
+        <h1 className="h2-bold">Orders({totalCount})</h1>
         <ClearAdminInputSearch query={query} href="/admin/orders" />
       </div>
 

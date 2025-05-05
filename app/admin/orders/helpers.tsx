@@ -35,7 +35,7 @@ export const tableRows: T_Columns<T_OrderFromDB> = [
   {
     title: "",
     getCell: ({ id }) => (
-      <div className="flex gap-4 justify-end text-primary">
+      <div className="flex items-center justify-end gap-2" >
         <DeleteDialog id={id} action={deleteOrder} />
         <ViewItemLink href={`/order/${id}`} />
       </div>
