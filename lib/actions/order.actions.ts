@@ -202,7 +202,7 @@ export const approvePayPalOrder = async (
   }
 };
 
-async function updateOrderToPaid({
+export async function updateOrderToPaid({
   orderId,
   paymentResult,
 }: {
