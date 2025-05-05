@@ -11,20 +11,21 @@ Stripe · PayPal · Uploadthing · Resend · shadcn/ui
 
 ## 🧪 Features
 
-- Auth (credentials & OAuth)  
-- Admin dashboard with analytics  
-- Product CRUD & categories  
-- Image/file uploads  
-- Stripe & PayPal checkout  
-- Email notifications  
-- Dark mode support  
+- Auth (credentials & OAuth)
+- Admin dashboard with analytics
+- Product CRUD & categories
+- Image/file uploads
+- Stripe & PayPal checkout
+- Email notifications
+- Dark mode support
 
 ## 🖼️ Screenshots:
-![Screenshot 1](./public/screenshots/Screenshot1.png)
-![Screenshot 2](./public/screenshots/Screenshot2.png)
-![Screenshot 3](./public/screenshots/Screenshot3.png)
-![Screenshot 4](./public/screenshots/Screenshot4.png)
-![Screenshot 5](./public/screenshots/Screenshot5.png)
+
+![Screenshot 1](./public/images/screenshots/Screenshot1.png)
+![Screenshot 2](./public/images/screenshots/Screenshot2.png)
+![Screenshot 3](./public/images/screenshots/Screenshot3.png)
+![Screenshot 4](./public/images/screenshots/Screenshot4.png)
+![Screenshot 5](./public/images/screenshots/Screenshot5.png)
 
 ## ⚙️ Setup
 
@@ -35,3 +36,4 @@ npm install
 cp .env.example .env # set env variables
 npx prisma generate
 npm run dev
+```
